@@ -64,6 +64,9 @@ def name_lines(unnamed_array):
                     id_num += 1
                 else:
                     named_array.append(line)
+            if idx != len(unnamed_array):
+                if re.match("^[a-zA-Z]+.*", line):
+                    named_array.append(line)
 
     if lonely_ID:
         raise ValueError("IDs without sequence identified")
