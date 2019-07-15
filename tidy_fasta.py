@@ -51,6 +51,9 @@ def name_lines(unnamed_array):
                 else:
                     lonely_ID = True
                     print(f"ID {line} has no sequence identified")
+            else:
+                lonely_ID = True
+                print(f"ID {line} has no sequence identified")
         elif idx == 0:
             if re.match("^[a-zA-Z]+.*", line):
                 named_array.append(f">protein-sol-{id_num}")
