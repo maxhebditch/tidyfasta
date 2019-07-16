@@ -84,7 +84,7 @@ def combine_lines(uncombined_array):
             print(f"Lowercase AA code found for sequence {name}, converting to uppercase")
             strseq = strseq.upper()
 
-        if re.search("[bjouxBJOUX]", strseq):
+        if re.search("[^acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWY]", strseq):
             print(f"Unrecognised AA code found for sequence {name}")
             badAA = True
 
