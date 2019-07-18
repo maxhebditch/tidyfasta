@@ -5,6 +5,7 @@ import re
 import argparse
 from shutil import copy2
 import sys
+import os
 
 def read_fasta(inputfile):
     #function to read in file and return an array
@@ -200,3 +201,5 @@ if __name__ == "__main__":
     copy2(inputfile,str(inputfile+"-old"))
     #rename output file to the inputfile
     copy2(outputfile,inputfile)
+    #remove temp file
+    os.remove(outputfile)
