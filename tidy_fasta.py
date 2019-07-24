@@ -67,17 +67,26 @@ def name_lines(unnamed_array):
         #if its the first item in the array and it looks like a sequence
         #then give it a name and add it
         elif idx == 0:
-            if re.match("^[a-zA-Z]+.*", line):
+            if re.match("^[a-za-z]+.*", line):
                 named_array.append(f">protein-sol-{id_num}")
                 id_num += 1
                 named_array.append(line)
+            if re.match("^ +", line):
+                named_array.append(f">protein-sol-{id_num}")
+                id_num += 1
         #if it isnt the first line and doesnt look like a sequence
         else:
+            if re.search("[\\\\<!#\/\"]", line):
+                raise ValueError(f"Nonstandard AA detected")
+                sys.exit()
             #if its not the penultimate item in the array
             if idx != len(unnamed_array)-1:
                 #if its not blank and the next item isnt an ID
                 #then add a generated ID name
                 if line == "" and not unnamed_array[idx+1].startswith(">"):
+                    named_array.append(f">protein-sol-{id_num}")
+                    id_num += 1
+                if re.match("^ +", line)  and not unnamed_array[idx+1].startswith(">"):
                     named_array.append(f">protein-sol-{id_num}")
                     id_num += 1
             #if not last item in array and looks like a sequence then add
