@@ -174,6 +174,10 @@ def write_fasta(clean_array,outputfile):
                     if idx != len(clean_array)-1:
                         output.write("\n")
 
+    if start == False:
+        raise ValueError("No sequences found: stopping")
+        sys.exit()
+
 if __name__ == "__main__":
 
     #Take Input file as a command line arguement
