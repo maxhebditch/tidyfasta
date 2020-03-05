@@ -67,7 +67,7 @@ def name_lines(unnamed_array):
         #if its the first item in the array and it looks like a sequence
         #then give it a name and add it
         elif idx == 0:
-            if re.match("^[a-za-z]+.*", line):
+            if re.match("^[a-zA-Z]+.*", line):
                 named_array.append(f">protein-sol-{id_num}")
                 id_num += 1
                 named_array.append(line)
@@ -165,6 +165,20 @@ def combine_lines(uncombined_array):
 
     return combined_array
 
+def test_single(test_array):
+
+    number_sequences=0
+
+    #go through array
+    for item in test_array:
+        #if it looks like an ID
+        if item.startswith(">"):
+            number_sequences+=1
+
+    if number_sequences > 1:
+        raise ValueError("More than one sequence present: stopping")
+        sys.exit()
+
 #write fasta file
 def write_fasta(clean_array,outputfile):
     #ensure don't start writing till first ID is found
@@ -187,26 +201,26 @@ def write_fasta(clean_array,outputfile):
         raise ValueError("No sequences found: stopping")
         sys.exit()
 
-if __name__ == "__main__":
-
-    #Take Input file as a command line arguement
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input", type=str, help="Input file name")
-    args = parser.parse_args()
-
-    inputfile  = args.input
+def tidy_fasta(inputfile,single):
     #temporary outputfile name
     outputfile = str(inputfile+"-formatted")
 
     #read file into array
     fasta_array = read_fasta(inputfile)
+
     #Tidy remove consecutive blank items from array
     tidy_array  = remove_blanks(fasta_array)
+
     #Add sequence ID for lines if missing, and look for
     #IDs without sequence
     named_array = name_lines(tidy_array)
+
     #gather and combine multiline as well as check for bad AA
     final_array = combine_lines(named_array)
+
+    if single:
+        test_single(final_array)
+
     #Write final array out
     write_fasta(final_array,outputfile)
     
@@ -216,3 +230,16 @@ if __name__ == "__main__":
     copy2(outputfile,inputfile)
     #remove temp file
     os.remove(outputfile)
+
+if __name__ == "__main__":
+
+    #Take Input file as a command line arguement
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", type=str, help="Input file name")
+    parser.add_argument("--single", action="store_true", help="Ensure only single sequence")
+    args = parser.parse_args()
+
+    inputfile  = args.input
+    single     = args.single
+
+    tidy_fasta(inputfile,single)
