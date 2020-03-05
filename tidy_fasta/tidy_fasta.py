@@ -78,7 +78,6 @@ def name_lines(unnamed_array):
         else:
             if re.search("[\\\\<!#\/\"]", line):
                 raise ValueError(f"Nonstandard AA detected")
-                sys.exit()
             #if its not the penultimate item in the array
             if idx != len(unnamed_array)-1:
                 #if its not blank and the next item isnt an ID
@@ -97,7 +96,6 @@ def name_lines(unnamed_array):
     #Raise an exception if any IDs without sequences are found
     if lonely_ID:
         raise ValueError(f"IDs with no sequence identified: stopping")
-        sys.exit()
     else:
         return named_array
 
@@ -150,7 +148,6 @@ def combine_lines(uncombined_array):
             #if its a bool then raise error
             else:
                 raise ValueError("Non-standard AA identified: stopping")
-                sys.exit()
         #Otherwise if it looks like a string rather than a blank add to combiner
         elif re.search("^[a-zA-Z]", item):
             combiner.append(item)
@@ -161,7 +158,6 @@ def combine_lines(uncombined_array):
         combined_array.append(newseq)
     else:
         raise ValueError("Non-standard AA identified: stopping")
-        sys.exit()
 
     return combined_array
 
@@ -177,7 +173,6 @@ def test_single(test_array):
 
     if number_sequences > 1:
         raise ValueError("More than one sequence present: stopping")
-        sys.exit()
 
 #write fasta file
 def write_fasta(clean_array,outputfile):
@@ -199,37 +194,39 @@ def write_fasta(clean_array,outputfile):
 
     if start == False:
         raise ValueError("No sequences found: stopping")
-        sys.exit()
 
 def tidy_fasta(inputfile,single):
     #temporary outputfile name
     outputfile = str(inputfile+"-formatted")
 
-    #read file into array
-    fasta_array = read_fasta(inputfile)
+    try:
+        #read file into array
+        fasta_array = read_fasta(inputfile)
 
-    #Tidy remove consecutive blank items from array
-    tidy_array  = remove_blanks(fasta_array)
+        #Tidy remove consecutive blank items from array
+        tidy_array  = remove_blanks(fasta_array)
 
-    #Add sequence ID for lines if missing, and look for
-    #IDs without sequence
-    named_array = name_lines(tidy_array)
+        #Add sequence ID for lines if missing, and look for
+        #IDs without sequence
+        named_array = name_lines(tidy_array)
 
-    #gather and combine multiline as well as check for bad AA
-    final_array = combine_lines(named_array)
+        #gather and combine multiline as well as check for bad AA
+        final_array = combine_lines(named_array)
 
-    if single:
-        test_single(final_array)
+        if single:
+            test_single(final_array)
 
-    #Write final array out
-    write_fasta(final_array,outputfile)
-    
-    #copy inputfile to a backup
-    copy2(inputfile,str(inputfile+"-old"))
-    #rename output file to the inputfile
-    copy2(outputfile,inputfile)
-    #remove temp file
-    os.remove(outputfile)
+        #Write final array out
+        write_fasta(final_array,outputfile)
+        
+        #copy inputfile to a backup
+        copy2(inputfile,str(inputfile+"-old"))
+        #rename output file to the inputfile
+        copy2(outputfile,inputfile)
+        #remove temp file
+        os.remove(outputfile)
+    except ValueError:
+        raise
 
 if __name__ == "__main__":
 
