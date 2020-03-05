@@ -27,11 +27,13 @@ def remove_blanks(original_array):
     for idx, line in enumerate(original_array):
         #always write first line unless its blank
         if idx == 0:
-            if line != "":
+            if not re.match("^\s+$",line):
                 tidy_array.append(line)
-        #only write line if the previous line is not also black
+        #only write line if the previous line is not also blank
         elif line == "":
-            if original_array[idx-1] != "":
+            if re.match("^\s+$",original_array[idx-1]):
+                tidy_array.append(line)
+            elif original_array[idx-1] != "":
                 tidy_array.append(line)
         #write line if not blank
         else:
@@ -78,20 +80,21 @@ def name_lines(unnamed_array):
         else:
             if re.search("[\\\\<!#\/\"]", line):
                 raise ValueError(f"Nonstandard AA detected")
-            #if its not the penultimate item in the array
-            if idx != len(unnamed_array)-1:
-                #if its not blank and the next item isnt an ID
-                #then add a generated ID name
-                if line == "" and not unnamed_array[idx+1].startswith(">"):
-                    named_array.append(f">protein-sol-{id_num}")
-                    id_num += 1
-                if re.match("^ +", line)  and not unnamed_array[idx+1].startswith(">"):
-                    named_array.append(f">protein-sol-{id_num}")
-                    id_num += 1
-            #if not last item in array and looks like a sequence then add
-            if idx != len(unnamed_array):
-                if re.match("^[a-zA-Z]+.*", line):
-                    named_array.append(line)
+            if not re.search("[\s+]", line):
+                #if its not the penultimate item in the array
+                if idx != len(unnamed_array)-1:
+                    #if its not blank and the next item isnt an ID
+                    #then add a generated ID name
+                    if line == "" and not unnamed_array[idx+1].startswith(">"):
+                        named_array.append(f">protein-sol-{id_num}")
+                        id_num += 1
+                    if re.match("^ +", line)  and not unnamed_array[idx+1].startswith(">"):
+                        named_array.append(f">protein-sol-{id_num}")
+                        id_num += 1
+                #if not last item in array and looks like a sequence then add
+                if idx != len(unnamed_array):
+                    if re.match("^[a-zA-Z]+.*", line):
+                        named_array.append(line)
 
     #Raise an exception if any IDs without sequences are found
     if lonely_ID:
@@ -174,26 +177,33 @@ def test_single(test_array):
     if number_sequences > 1:
         raise ValueError("More than one sequence present: stopping")
 
+def orphan_check(combine_array):
+
+    #go through array
+    for idx, item in enumerate(combine_array):
+        if idx != len(combine_array):
+            if item.startswith(">"):
+                if not re.match('[acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWY]',combine_array[idx+1]):
+                    del combine_array[idx]
+
+    for idx, item in enumerate(combine_array):
+        if len(item) == 0:
+            del combine_array[idx]
+
+    return combine_array
+
 #write fasta file
 def write_fasta(clean_array,outputfile):
-    #ensure don't start writing till first ID is found
-    start = False
+
     with open(outputfile, "w") as output:
         for idx,line in enumerate(clean_array):
             if line.startswith(">"):
-                start = True
-            #once started
-            if start:
-                #write output to file
                 output.write(line+"\n")
-                #add space between ID and next sequence
-                if idx % 2 != 1:
-                    #if not penultimate line
-                    if idx != len(clean_array)-1:
-                        output.write("\n")
-
-    if start == False:
-        raise ValueError("No sequences found: stopping")
+            else:
+                if idx == len(clean_array)-1:
+                    output.write(line+"\n")
+                else:
+                    output.write(line+"\n\n")
 
 def tidy_fasta(inputfile,single):
     #temporary outputfile name
@@ -211,7 +221,9 @@ def tidy_fasta(inputfile,single):
         named_array = name_lines(tidy_array)
 
         #gather and combine multiline as well as check for bad AA
-        final_array = combine_lines(named_array)
+        combine_array = combine_lines(named_array)
+
+        final_array = orphan_check(combine_array)
 
         if single:
             test_single(final_array)
