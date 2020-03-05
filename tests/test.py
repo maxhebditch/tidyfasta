@@ -4,6 +4,8 @@ import unittest
 import filecmp
 
 import os
+import io
+import sys
 
 def module_from_file(module_name, file_path):
     spec = importlib.util.spec_from_file_location(module_name, file_path)
@@ -23,10 +25,20 @@ class TestSum(unittest.TestCase):
 
         tidy_fasta.tidy_fasta(original_name,False)
 
-        self.assertTrue(filecmp.cmp(original_name, reference_name, shallow=False),"test for missing name failed")
+        self.assertTrue(filecmp.cmp(original_name, reference_name, shallow=False))
 
         os.remove(original_name)
         os.rename(intermediate_name,original_name)
+
+    def test_bad_chars_sequence(self):
+        original_name     = "./inputs/test_bad_chars_sequence.txt"
+
+        with self.assertRaises(ValueError):
+            tidy_fasta.tidy_fasta(original_name,False)
+        #self.assertRaises(ValueError,tidy_fasta.tidy_fasta(original_name,False))
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
