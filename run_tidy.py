@@ -194,7 +194,7 @@ def remove_blanks(fasta_array):
 
     return clean_array
 
-def tidy_fasta(inputfile,single):
+def run_tidy(inputfile,single):
     #temporary outputfile name
     outputfile = str(inputfile+"-formatted")
 
@@ -224,16 +224,3 @@ def tidy_fasta(inputfile,single):
 
     except ValueError:
         raise
-
-if __name__ == "__main__":
-
-    #Take Input file as a command line arguement
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input", type=str, help="Input file name")
-    parser.add_argument("--single", action="store_true", help="Ensure only single sequence")
-    args = parser.parse_args()
-
-    inputfile  = args.input
-    single     = args.single
-
-    tidy_fasta(inputfile,single)
