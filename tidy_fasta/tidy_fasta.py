@@ -8,41 +8,15 @@ import sys
 import os
 
 def read_fasta(inputfile):
-    #function to read in file and return an array
-
     read_file_array = []
 
     with open (inputfile, "r") as fasta:
         for line in fasta:
-            #new line characters stripped
             read_file_array.append(line.replace("\n",""))
 
     return read_file_array
 
-def remove_blanks(original_array):
-    #Function to remove double blank lines from the fasta array
-
-    tidy_array = []
-
-    for idx, line in enumerate(original_array):
-        #always write first line unless its blank
-        if idx == 0:
-            if not re.match("^\s+$",line):
-                tidy_array.append(line)
-        #only write line if the previous line is not also blank
-        elif line == "":
-            if re.match("^\s+$",original_array[idx-1]):
-                tidy_array.append(line)
-            elif original_array[idx-1] != "":
-                tidy_array.append(line)
-        #write line if not blank
-        else:
-            tidy_array.append(line)
-
-    return tidy_array
-
-def name_lines(unnamed_array):
-    #Check for names, if no name then assign a name
+def add_missing_names(unnamed_array):
 
     named_array = []
     id_num = 0
@@ -108,7 +82,7 @@ def name_lines(unnamed_array):
     else:
         return named_array
 
-def combine_lines(uncombined_array):
+def combine_split_lines(uncombined_array):
 
     #Combine multiline sequences to one line
     #detect non AA characters and correct lowercase
@@ -211,6 +185,18 @@ def write_fasta(clean_array,outputfile):
                 else:
                     output.write(line+"\n\n")
 
+
+def remove_blanks(fasta_array):
+
+    clean_array = []
+
+    for line in fasta_array:
+        if not re.match('^\s*$',line):
+            clean_array.append(line)
+
+    return clean_array
+
+
 def tidy_fasta(inputfile,single):
     #temporary outputfile name
     outputfile = str(inputfile+"-formatted")
@@ -219,23 +205,18 @@ def tidy_fasta(inputfile,single):
         #read file into array
         fasta_array = read_fasta(inputfile)
 
-        #Tidy remove consecutive blank items from array
-        tidy_array  = remove_blanks(fasta_array)
+        fasta_array = add_missing_names(fasta_array)
 
-        #Add sequence ID for lines if missing, and look for
-        #IDs without sequence
-        named_array = name_lines(tidy_array)
+        fasta_array = remove_blanks(fasta_array)
 
-        #gather and combine multiline as well as check for bad AA
-        combine_array = combine_lines(named_array)
+        fasta_array = combine_split_lines(fasta_array)
 
-        final_array = orphan_check(combine_array)
+        fasta_array = orphan_check(fasta_array)
 
         if single:
-            test_single(final_array)
+            test_single(fasta_array)
 
-        #Write final array out
-        write_fasta(final_array,outputfile)
+        write_fasta(fasta_array,outputfile)
         
         #copy inputfile to a backup
         copy2(inputfile,str(inputfile+"-old"))
