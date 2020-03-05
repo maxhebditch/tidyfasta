@@ -46,6 +46,22 @@ class TestSum(unittest.TestCase):
 
         assert_test_match(self,"test_missing_name",False)
 
+    def test_multiple_sequences_nonames(self):
+
+        assert_test_match(self,"test_multiple_sequences_nonames",False)
+
+    def test_broken_lines(self):
+
+        assert_test_match(self,"test_broken_lines",False)
+
+    def test_broken_lines_multiple(self):
+
+        assert_test_match(self,"test_broken_lines_multiple",False)
+
+    def test_lowercase(self):
+
+        assert_test_match(self,"test_lowercase",False)
+
     def test_bad_chars_sequence(self):
         original_name     = "./inputs/test_bad_chars_sequence.txt"
 
