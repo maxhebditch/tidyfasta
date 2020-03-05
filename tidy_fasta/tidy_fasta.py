@@ -48,6 +48,8 @@ def name_lines(unnamed_array):
     id_num = 0
     lonely_ID = False
 
+    lonely_ID_array = []
+
     for idx, line in enumerate(unnamed_array):
         #if it looks like an ID line
         if line.startswith(">"):
@@ -60,12 +62,12 @@ def name_lines(unnamed_array):
                 #If not, then it may be an ID without a sequence
                 else:
                     lonely_ID = True
-                    print(f"ID {line} has no sequence identified")
+                    lonely_ID_array.append(line)
             #If its an ID line, but its the last item in the array
             #then it should/could be an ID without a sequence
             else:
                 lonely_ID = True
-                print(f"ID {line} has no sequence identified")
+                lonely_ID_array.append(line)
         #if its the first item in the array and it looks like a sequence
         #then give it a name and add it
         elif idx == 0:
@@ -98,7 +100,11 @@ def name_lines(unnamed_array):
 
     #Raise an exception if any IDs without sequences are found
     if lonely_ID:
-        raise ValueError(f"IDs with no sequence identified: stopping")
+
+        for ID in lonely_ID_array:
+            print(f"ID {ID} has no sequence identified")
+
+        raise ValueError("IDs with no sequence identified: stopping")
     else:
         return named_array
 
@@ -237,6 +243,7 @@ def tidy_fasta(inputfile,single):
         copy2(outputfile,inputfile)
         #remove temp file
         os.remove(outputfile)
+
     except ValueError:
         raise
 

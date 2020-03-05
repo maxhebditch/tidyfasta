@@ -73,5 +73,17 @@ class TestSum(unittest.TestCase):
         with self.assertRaises(ValueError):
             tidy_fasta.tidy_fasta(original_name,False)
 
+    def test_bad_no_sequence(self):
+        original_name     = "./inputs/test_no_sequence.txt"
+
+        with self.assertRaises(ValueError):
+            tidy_fasta.tidy_fasta(original_name,False)
+
+    def test_bad_no_sequence_multiple(self):
+        original_name     = "./inputs/test_no_sequence_multiple.txt"
+
+        with self.assertRaises(ValueError):
+            tidy_fasta.tidy_fasta(original_name,False)
+
 if __name__ == '__main__':
     unittest.main()
