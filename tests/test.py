@@ -31,9 +31,10 @@ def assert_test_match(self,testfile_name,single):
 
         tidy_fasta.tidy_fasta(original_name,single)
 
-        self.assertTrue(filecmp.cmp(original_name, reference_name, shallow=False))
-
-        tidy_up_files(original_name,intermediate_name)
+        try:
+            self.assertTrue(filecmp.cmp(original_name, reference_name, shallow=False))
+        finally:
+            tidy_up_files(original_name,intermediate_name)
 
 
 class TestSum(unittest.TestCase):
