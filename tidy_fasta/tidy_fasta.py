@@ -157,20 +157,18 @@ def test_single(test_array):
     if number_sequences > 1:
         raise ValueError("More than one sequence present: stopping")
 
-def orphan_check(combine_array):
+def orphan_check(fasta_array):
 
-    #go through array
-    for idx, item in enumerate(combine_array):
-        if idx != len(combine_array):
-            if item.startswith(">"):
-                if not re.match('[acdefghiklmnpqrstvwyACDEFGHIKLMNPQRSTVWY]',combine_array[idx+1]):
-                    del combine_array[idx]
+    clean_array = []
 
-    for idx, item in enumerate(combine_array):
-        if len(item) == 0:
-            del combine_array[idx]
+    for idx, item in enumerate(fasta_array):
+        if item.startswith(">"):
+            if re.match("[A-Z]",fasta_array[idx+1]):
+                clean_array.append(item)
+        elif re.match("[A-Z]",item):
+            clean_array.append(item)
 
-    return combine_array
+    return clean_array
 
 #write fasta file
 def write_fasta(clean_array,outputfile):

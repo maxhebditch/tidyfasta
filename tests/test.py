@@ -67,6 +67,10 @@ class TestSum(unittest.TestCase):
 
         assert_test_match(self,"test_excess_whitespace_end",False)
 
+    def test_excess_whitespace_mid(self):
+
+        assert_test_match(self,"test_excess_whitespace_mid",False)
+
     def test_bad_chars_sequence(self):
         original_name     = "./inputs/test_bad_chars_sequence.txt"
 
