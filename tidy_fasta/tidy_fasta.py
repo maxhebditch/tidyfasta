@@ -194,7 +194,6 @@ def remove_blanks(fasta_array):
 
     return clean_array
 
-
 def tidy_fasta(inputfile,single):
     #temporary outputfile name
     outputfile = str(inputfile+"-formatted")

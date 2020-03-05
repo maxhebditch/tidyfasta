@@ -12,7 +12,7 @@ def module_from_file(module_name, file_path):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
-
+ 
 tidy_fasta = module_from_file("tidy_fasta", "../tidy_fasta/tidy_fasta.py")
 
 def set_up_files(testfile_name):
@@ -42,6 +42,10 @@ class TestSum(unittest.TestCase):
     def test_gold_standard(self):
 
         assert_test_match(self,"test_gold_standard",False)
+
+    def test_gold_standard_multiple(self):
+
+        assert_test_match(self,"test_gold_standard_multiple",False)
 
     def test_missing_name(self):
 
@@ -78,16 +82,19 @@ class TestSum(unittest.TestCase):
             tidy_fasta.tidy_fasta(original_name,False)
 
     def test_bad_no_sequence(self):
-        original_name     = "./inputs/test_no_sequence.txt"
 
         with self.assertRaises(ValueError):
-            tidy_fasta.tidy_fasta(original_name,False)
+            tidy_fasta.tidy_fasta("./inputs/test_no_sequence.txt",False)
 
     def test_bad_no_sequence_multiple(self):
-        original_name     = "./inputs/test_no_sequence_multiple.txt"
 
         with self.assertRaises(ValueError):
-            tidy_fasta.tidy_fasta(original_name,False)
+            tidy_fasta.tidy_fasta("./inputs/test_no_sequence_multiple.txt",False)
+
+    def test_single_check(self):
+
+        with self.assertRaises(ValueError):
+            tidy_fasta.tidy_fasta("./inputs/test_gold_standard_multiple.txt",True)
 
 if __name__ == '__main__':
     unittest.main()
