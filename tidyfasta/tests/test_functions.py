@@ -16,15 +16,15 @@ class TestFunctions(unittest.TestCase):
         test_array = read_fasta(get_test_dir_name()+"/inputs/test_gold_short.txt")
         ref_array = ["> alirocumab","MVKVYAPASSANMSVGFDVL","GAAVTPVDG"]
 
-        self.assertTrue(test_array,ref_array)
+        self.assertEqual(ref_array, test_array)
 
     def test_func_combine_split_sequences(self):
 
-        input_array = ["> alirocumab","MVKVYAPASSANMSVGFDVL","GAAVTPVDG"," ",">SEQ 2","ATYYTYTY"]
+        input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL", "GAAVTPVDG", " ", ">SEQ 2", "ATYYTYTY"]
         test_array = combine_split_sequences(input_array)
-        ref_array = ["> alirocumab","MVKVYAPASSANMSVGFDVLGAAVTPVDG",">SEQ 2","ATYYTYTY"]
+        ref_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVLGAAVTPVDG", ">SEQ 2", "ATYYTYTY"]
 
-        self.assertTrue(test_array,ref_array)
+        self.assertEqual(ref_array, test_array)
 
     def test_class_method_ProcessFasta_get_fasta(self):
 
@@ -33,7 +33,15 @@ class TestFunctions(unittest.TestCase):
         test_ProcessFasta = ProcessFasta(test_file, False)
 
         test_array = test_ProcessFasta.get_fasta()
-        ref_array = ["> alirocumab","MVKVYAPASSANMSVGFDVL","GAAVTPVDG"]
+        ref_array = ['> alirocumab', 'MVKVYAPASSANMSVGFDVLGAAVTPVDG']
 
-        self.assertTrue(test_array,ref_array)
+        self.assertEqual(test_array,ref_array)
+
+    def test_add_missing_names(self):
+
+        input_array = ["> alirocumab","MVKVYAPASSANMSVGFDVL"," ","ATYYTYTY"]
+        test_array = combine_split_sequences(input_array)
+        ref_array = ["> alirocumab","MVKVYAPASSANMSVGFDVL",">SEQ 2","ATYYTYTY"]
+
+        self.assertEqual(test_array,ref_array)
 
