@@ -22,7 +22,7 @@ class TestFunctions(unittest.TestCase):
 
         input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL", "GAAVTPVDG", " ", ">SEQ 2", "ATYYTYTY"]
         test_array = combine_split_sequences(input_array)
-        ref_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVLGAAVTPVDG", ">SEQ 2", "ATYYTYTY"]
+        ref_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVLGAAVTPVDG", " ", ">SEQ 2", "ATYYTYTY"]
 
         self.assertEqual(ref_array, test_array)
 
@@ -35,13 +35,13 @@ class TestFunctions(unittest.TestCase):
         test_array = test_ProcessFasta.get_fasta()
         ref_array = ['> alirocumab', 'MVKVYAPASSANMSVGFDVLGAAVTPVDG']
 
-        self.assertEqual(test_array,ref_array)
+        self.assertEqual(ref_array, test_array)
 
     def test_add_missing_names(self):
 
-        input_array = ["> alirocumab","MVKVYAPASSANMSVGFDVL"," ","ATYYTYTY"]
-        test_array = combine_split_sequences(input_array)
-        ref_array = ["> alirocumab","MVKVYAPASSANMSVGFDVL",">SEQ 2","ATYYTYTY"]
+        input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL", " ", "ATYYTYTY"]
+        test_array = add_missing_names(input_array)
+        ref_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL", "> sequence0", "ATYYTYTY"]
 
-        self.assertEqual(test_array,ref_array)
+        self.assertEqual(ref_array, test_array)
 
