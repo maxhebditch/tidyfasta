@@ -26,3 +26,14 @@ class TestFunctions(unittest.TestCase):
 
         self.assertTrue(test_array,ref_array)
 
+    def test_class_method_ProcessFasta_get_fasta(self):
+
+        test_file = get_test_dir_name()+"/inputs/test_gold_short.txt"
+
+        test_ProcessFasta = ProcessFasta(test_file, False)
+
+        test_array = test_ProcessFasta.get_fasta()
+        ref_array = ["> alirocumab","MVKVYAPASSANMSVGFDVL","GAAVTPVDG"]
+
+        self.assertTrue(test_array,ref_array)
+
