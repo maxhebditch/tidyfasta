@@ -202,11 +202,11 @@ def run_tidy(inputfile,single):
         #read file into array
         fasta_array = read_fasta(inputfile)
 
-        fasta_array = add_missing_names(fasta_array)
+        fasta_array = combine_split_lines(fasta_array)
 
         fasta_array = remove_blanks(fasta_array)
 
-        fasta_array = combine_split_lines(fasta_array)
+        fasta_array = add_missing_names(fasta_array)
 
         fasta_array = orphan_check(fasta_array)
 
