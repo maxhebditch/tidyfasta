@@ -18,6 +18,17 @@ class TestFunctions(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
+    def test_func_read_fasta_excess_whitespace_multi(self):
+
+        input_array = read_fasta(get_test_dir_name()+"/inputs/test_excess_whitespace_multi.txt")
+        test_array = combine_split_sequences(input_array)
+
+        ref_array = ["> alirocumab1", "MVKVYAPASSANMSVGFDVLGAA",
+                    "> alirocumab2", "MVKVYAPASSANMSVGFDVLGAA",
+                    "> alirocumab3", "MVKVYAPASSANMSVGFDVLGAA"]
+
+        self.assertEqual(ref_array, test_array)
+
     def test_func_combine_split_sequences(self):
 
         input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL", "GAAVTPVDG", " ", ">SEQ 2", "ATYYTYTY"]
@@ -65,6 +76,20 @@ class TestFunctions(unittest.TestCase):
 
         self.assertEqual("> alirocumab", test_array[0].ID)
         self.assertEqual("MVKVYAPASSANMSVGFDVLGAAVTPVDGALLGDVVTVEAAETF", test_array[0].sequence)
+
+    @unittest.skip
+    def test_class_method_ProcessFASTA_get_fasta_excess_whitespace_multi(self):
+
+        test_ProcessFasta = ProcessFasta(get_test_dir_name()+"/inputs/test_excess_whitespace_multi.txt",False)
+
+        test_array = test_ProcessFasta.get_fasta()
+
+        self.assertEqual("> alirocumab1", test_array[0].ID)
+        self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", test_array[0].sequence)
+        self.assertEqual("> alirocumab2", test_array[1].ID)
+        self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", test_array[1].sequence)
+        self.assertEqual("> alirocumab3", test_array[2].ID)
+        self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", test_array[2].sequence)
 
 
 if __name__ == '__main__':
