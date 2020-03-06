@@ -48,11 +48,34 @@ class TestFunctions(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
-    def test_add_missing_names(self):
+    def test_class_method_ProcessFasta_get_fasta_missing_id_multi(self):
 
-        input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL", " ", "ATYYTYTY"]
-        test_array = add_missing_names(input_array)
-        ref_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL", "> sequence0", "ATYYTYTY"]
+        test_file = get_test_dir_name()+"/inputs/test_missing_id_multi.txt"
+
+        test_ProcessFasta = ProcessFasta(test_file, False)
+
+        test_array = test_ProcessFasta.get_fasta()
+        ref_array = ['> sequence0', 'MVKVYAPASSANMSVGFDVLGAAVTPVDG',
+                     '> sequence1', 'MVKVYAPASSANMSVGFDVLGAAVTPVDG',
+                     '> sequence2', 'MVKVYAPASSANMSVGFDVLGAAVTPVDG']
 
         self.assertEqual(ref_array, test_array)
 
+    def test_add_missing_names(self):
+
+        input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL",
+                       " ", "ATYYTYTY",
+                       "> NAMED", "ATYYTYTY",
+                       " ", "GGGGGGGG"]
+
+        test_array = add_missing_names(input_array)
+
+        ref_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL",
+                       "> sequence0", "ATYYTYTY",
+                       "> NAMED", "ATYYTYTY",
+                       "> sequence1", "GGGGGGGG"]
+
+        self.assertEqual(ref_array, test_array)
+
+if __name__ == '__main__':
+    unittest.main()

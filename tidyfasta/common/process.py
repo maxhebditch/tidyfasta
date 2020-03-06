@@ -26,7 +26,6 @@ def combine_split_sequences(fasta_array):
         else:
             return False
 
-
     combined_array = []
     combiner = []
 
@@ -47,21 +46,29 @@ def add_missing_names(fasta_array):
 
     named_array = []
     new_name_int = 0
+    unknown_name = True
 
-    for index in range(0, len(fasta_array)):
-        current_item = fasta_array[index]
+    for item in fasta_array:
 
-        if current_item.startswith(">"):
-            named_array.append(current_item)
-        else:
-            if index % 2 == 0:
-                new_name = "> sequence"+str(new_name_int)
-                named_array.append(new_name)
+        if item.startswith(">"):
+            named_array.append(item)
+            unknown_name = False
+
+        elif re.match(r'^\s*$', item):
+            new_name = "> sequence"+str(new_name_int)
+            new_name_int += 1
+            unknown_name = False
+            named_array.append(new_name)
+
+        elif re.match('^[a-zA-Z]', item):
+
+            if unknown_name:
+                new_name = "> sequence" + str(new_name_int)
                 new_name_int += 1
-                if re.match('^[a-zA-Z]',current_item):
-                    named_array.append(current_item)
-            else:
-                named_array.append(current_item)
+                named_array.append(new_name)
+
+            named_array.append(item)
+            unknown_name = True
 
     return named_array
 
