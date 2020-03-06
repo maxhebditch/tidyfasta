@@ -1,6 +1,6 @@
 import argparse
 
-from tidyfasta.common.process import process_fasta
+from .common.process import ProcessFasta
 
 if __name__ == "__main__":
 
@@ -12,4 +12,4 @@ if __name__ == "__main__":
     inputfile = args.input
     single = args.single
 
-    process_fasta(inputfile, single)
+    ProcessFasta(inputfile, single)
