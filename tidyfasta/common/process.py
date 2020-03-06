@@ -1,7 +1,7 @@
 import re
 
 class fasta_sequence:
-    def __init__(self, sequence, ID):
+    def __init__(self, ID, sequence):
         self.ID = ID
         self.sequence = sequence
 
@@ -72,6 +72,16 @@ def add_missing_names(fasta_array):
 
     return named_array
 
+def convert_to_obj_array(fasta_array):
+
+    index = 0
+    object_array = []
+
+    while index < len(fasta_array):
+        object_array.append(fasta_sequence(fasta_array[index], fasta_array[index + 1]))
+        index += 2
+
+    return object_array
 
 
 

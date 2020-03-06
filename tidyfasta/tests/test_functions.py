@@ -77,5 +77,20 @@ class TestFunctions(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
+    def test_convert_to_object_array(self):
+
+        input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL",
+                     "> sequence1", "GGGGGGGG"]
+
+        test_array = convert_to_obj_array(input_array)
+
+        obj0 = fasta_sequence("> alirocumab", "MVKVYAPASSANMSVGFDVL")
+        obj1 = fasta_sequence("> sequence1", "GGGGGGGG")
+
+        self.assertEqual(test_array[0].ID, obj0.ID)
+        self.assertEqual(test_array[1].ID, obj1.ID)
+        self.assertEqual(test_array[0].sequence, obj0.sequence)
+        self.assertEqual(test_array[1].sequence, obj1.sequence)
+
 if __name__ == '__main__':
     unittest.main()
