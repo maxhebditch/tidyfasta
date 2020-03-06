@@ -11,10 +11,18 @@ def get_test_dir_name():
 
 class TestFunctions(unittest.TestCase):
 
-    def test_read_fasta(self):
+    def test_func_read_fasta(self):
 
         test_array = read_fasta(get_test_dir_name()+"/inputs/test_gold_short.txt")
         ref_array = ["> alirocumab","MVKVYAPASSANMSVGFDVL","GAAVTPVDG"]
+
+        self.assertTrue(test_array,ref_array)
+
+    def test_func_combine_split_sequences(self):
+
+        input_array = ["> alirocumab","MVKVYAPASSANMSVGFDVL","GAAVTPVDG"," ",">SEQ 2","ATYYTYTY"]
+        test_array = combine_split_sequences(input_array)
+        ref_array = ["> alirocumab","MVKVYAPASSANMSVGFDVLGAAVTPVDG",">SEQ 2","ATYYTYTY"]
 
         self.assertTrue(test_array,ref_array)
 
