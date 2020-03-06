@@ -58,6 +58,8 @@ def add_missing_names(fasta_array):
                 new_name = "> sequence"+str(new_name_int)
                 named_array.append(new_name)
                 new_name_int += 1
+                if re.match('^[a-zA-Z]',current_item):
+                    named_array.append(current_item)
             else:
                 named_array.append(current_item)
 
@@ -85,4 +87,5 @@ class ProcessFasta():
     def get_fasta(self):
         fasta_array = read_fasta(self.inputfile)
         fasta_array = combine_split_sequences(fasta_array)
+        fasta_array = add_missing_names(fasta_array)
         return fasta_array

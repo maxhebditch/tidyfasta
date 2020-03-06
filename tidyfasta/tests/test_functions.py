@@ -37,6 +37,17 @@ class TestFunctions(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
+    def test_class_method_ProcessFasta_get_fasta_missing_id(self):
+
+        test_file = get_test_dir_name()+"/inputs/test_missing_id.txt"
+
+        test_ProcessFasta = ProcessFasta(test_file, False)
+
+        test_array = test_ProcessFasta.get_fasta()
+        ref_array = ['> sequence0', 'MVKVYAPASSANMSVGFDVLGAAVTPVDG']
+
+        self.assertEqual(ref_array, test_array)
+
     def test_add_missing_names(self):
 
         input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL", " ", "ATYYTYTY"]
