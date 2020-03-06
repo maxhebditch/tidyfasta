@@ -105,4 +105,5 @@ class ProcessFasta():
         fasta_array = read_fasta(self.inputfile)
         fasta_array = combine_split_sequences(fasta_array)
         fasta_array = add_missing_names(fasta_array)
+        fasta_array = convert_to_obj_array(fasta_array)
         return fasta_array

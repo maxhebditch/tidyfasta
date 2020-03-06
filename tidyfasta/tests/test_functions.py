@@ -26,41 +26,6 @@ class TestFunctions(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
-    def test_class_method_ProcessFasta_get_fasta(self):
-
-        test_file = get_test_dir_name()+"/inputs/test_gold_short.txt"
-
-        test_ProcessFasta = ProcessFasta(test_file, False)
-
-        test_array = test_ProcessFasta.get_fasta()
-        ref_array = ['> alirocumab', 'MVKVYAPASSANMSVGFDVLGAAVTPVDG']
-
-        self.assertEqual(ref_array, test_array)
-
-    def test_class_method_ProcessFasta_get_fasta_missing_id(self):
-
-        test_file = get_test_dir_name()+"/inputs/test_missing_id.txt"
-
-        test_ProcessFasta = ProcessFasta(test_file, False)
-
-        test_array = test_ProcessFasta.get_fasta()
-        ref_array = ['> sequence0', 'MVKVYAPASSANMSVGFDVLGAAVTPVDG']
-
-        self.assertEqual(ref_array, test_array)
-
-    def test_class_method_ProcessFasta_get_fasta_missing_id_multi(self):
-
-        test_file = get_test_dir_name()+"/inputs/test_missing_id_multi.txt"
-
-        test_ProcessFasta = ProcessFasta(test_file, False)
-
-        test_array = test_ProcessFasta.get_fasta()
-        ref_array = ['> sequence0', 'MVKVYAPASSANMSVGFDVLGAAVTPVDG',
-                     '> sequence1', 'MVKVYAPASSANMSVGFDVLGAAVTPVDG',
-                     '> sequence2', 'MVKVYAPASSANMSVGFDVLGAAVTPVDG']
-
-        self.assertEqual(ref_array, test_array)
-
     def test_add_missing_names(self):
 
         input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL",
@@ -91,6 +56,16 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual(test_array[1].ID, obj1.ID)
         self.assertEqual(test_array[0].sequence, obj0.sequence)
         self.assertEqual(test_array[1].sequence, obj1.sequence)
+
+    def test_class_method_ProcessFASTA_get_fasta_gold_standard(self):
+
+        test_ProcessFasta = ProcessFasta(get_test_dir_name()+"/inputs/test_gold_standard.txt",False)
+
+        test_array = test_ProcessFasta.get_fasta()
+
+        self.assertEqual("> alirocumab", test_array[0].ID)
+        self.assertEqual("MVKVYAPASSANMSVGFDVLGAAVTPVDGALLGDVVTVEAAETF", test_array[0].sequence)
+
 
 if __name__ == '__main__':
     unittest.main()
