@@ -19,6 +19,7 @@ def read_fasta(inputfile) -> object:
 def combine_split_sequences(fasta_array):
 
     def end_of_sequence(item):
+        item = item.strip()
         if item.startswith(">"):
             return True
         elif re.match(r"^\s*$", item):
@@ -75,6 +76,7 @@ def add_missing_names(fasta_array):
     named_array = []
     new_name_int = 0
     unknown_name = True
+    print(fasta_array)
 
     for item in fasta_array:
 

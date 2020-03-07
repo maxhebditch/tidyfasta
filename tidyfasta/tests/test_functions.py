@@ -77,7 +77,6 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual("> alirocumab", test_array[0].ID)
         self.assertEqual("MVKVYAPASSANMSVGFDVLGAAVTPVDGALLGDVVTVEAAETF", test_array[0].sequence)
 
-    @unittest.skip
     def test_class_method_ProcessFASTA_get_fasta_excess_whitespace_multi(self):
 
         test_ProcessFasta = ProcessFasta(get_test_dir_name()+"/inputs/test_excess_whitespace_multi.txt",False)
