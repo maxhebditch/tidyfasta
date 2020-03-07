@@ -5,6 +5,14 @@ class fasta_sequence:
         self.ID = ID
         self.sequence = sequence
 
+def identify_line_type(item):
+    item = item.strip()
+    if item.startswith(">"):
+        return "ID"
+    elif re.match(r"^\s*$", item):
+        return "WHITESPACE"
+    elif re.match(r"[a-zA-Z0-9]", item):
+        return "SEQUENCE"
 
 def read_fasta(inputfile) -> object:
     read_file_array = []
@@ -19,13 +27,12 @@ def read_fasta(inputfile) -> object:
 def combine_split_sequences(fasta_array):
 
     def end_of_sequence(item):
-        item = item.strip()
-        if item.startswith(">"):
+        if identify_line_type(item) == "ID":
             return True
-        elif re.match(r"^\s*$", item):
-            return True
-        else:
+        elif identify_line_type(item) == "SEQUENCE":
             return False
+        else:
+            return True
 
     combined_array = []
     combiner = []
@@ -45,10 +52,9 @@ def combine_split_sequences(fasta_array):
 def remove_excess_whitespace(fasta_array):
 
     def is_sequence_or_id(item):
-        item = item.strip()
-        if re.match(r"[a-zA-Z0-9]", item):
+        if identify_line_type(item) == "ID":
             return True
-        elif item.startswith(">"):
+        elif identify_line_type(item) == "SEQUENCE":
             return True
         else:
             return False
