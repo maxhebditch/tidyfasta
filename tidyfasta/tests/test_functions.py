@@ -21,7 +21,7 @@ class TestFunctions(unittest.TestCase):
     def test_func_read_fasta_excess_whitespace_multi(self):
 
         input_array = read_fasta(get_test_dir_name()+"/inputs/test_excess_whitespace_multi.txt")
-        test_array = combine_split_sequences(input_array)
+        test_array = remove_excess_whitespace(input_array)
 
         ref_array = ["> alirocumab1", "MVKVYAPASSANMSVGFDVLGAA",
                     "> alirocumab2", "MVKVYAPASSANMSVGFDVLGAA",
