@@ -44,11 +44,10 @@ def combine_split_sequences(fasta_array):
 def remove_excess_whitespace(fasta_array):
 
     def is_sequence_or_id(item):
+        item = item.strip()
         if re.match(r"[a-zA-Z0-9]", item):
             return True
-        if re.match(r"\s+>", item):
-            return True
-        if item.startswith(">"):
+        elif item.startswith(">"):
             return True
         else:
             return False
