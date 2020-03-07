@@ -76,7 +76,6 @@ def add_missing_names(fasta_array):
     named_array = []
     new_name_int = 0
     unknown_name = True
-    print(fasta_array)
 
     for item in fasta_array:
 
