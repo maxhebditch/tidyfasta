@@ -21,6 +21,8 @@ def read_fasta(inputfile) -> object:
         for line in fasta:
             read_file_array.append(line.replace("\n", ""))
 
+    if len(read_file_array) == 0: raise Exception("No data in file")
+
     return read_file_array
 
 
@@ -105,6 +107,7 @@ def add_missing_names(fasta_array):
             named_array.append(item)
             unknown_name = True
 
+    if len(named_array) == 0: raise Exception("Unpaired ID and sequence")
     return named_array
 
 def convert_to_obj_array(fasta_array):
@@ -137,9 +140,13 @@ class ProcessFasta():
         self.fasta_array = self.get_fasta()
 
     def get_fasta(self):
-        fasta_array = read_fasta(self.inputfile)
-        fasta_array = combine_split_sequences(fasta_array)
-        fasta_array = remove_excess_whitespace(fasta_array)
-        fasta_array = add_missing_names(fasta_array)
-        fasta_array = convert_to_obj_array(fasta_array)
+        try:
+            fasta_array = read_fasta(self.inputfile)
+            fasta_array = combine_split_sequences(fasta_array)
+            fasta_array = remove_excess_whitespace(fasta_array)
+            fasta_array = add_missing_names(fasta_array)
+            fasta_array = convert_to_obj_array(fasta_array)
+        except:
+            raise(ValueError)
         return fasta_array
+

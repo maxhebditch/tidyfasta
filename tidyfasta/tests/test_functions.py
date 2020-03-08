@@ -18,6 +18,10 @@ class TestFunctions(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
+    def test_func_read_fasta(self):
+
+        with self.assertRaises(Exception) : read_fasta(get_test_dir_name()+"/inputs/test_empty.txt")
+
     def test_func_read_fasta_excess_whitespace_multi(self):
 
         input_array = read_fasta(get_test_dir_name()+"/inputs/test_excess_whitespace_multi.txt")
