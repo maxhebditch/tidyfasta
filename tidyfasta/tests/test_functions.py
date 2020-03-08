@@ -150,6 +150,10 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual("> alirocumab3", test_array[2].ID)
         self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", test_array[2].sequence)
 
+    def test_class_method_ProcessFASTA_get_fasta_ID_only(self):
+
+        with self.assertRaises(Exception) : ProcessFasta(get_test_dir_name()+"/inputs/test_ID_only.txt",False)
+
     def test_func_validate_input(self):
 
         with self.assertRaises(Exception) : test_ID_sequence([])

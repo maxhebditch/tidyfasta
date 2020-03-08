@@ -17,7 +17,8 @@ def identify_line_type(item):
 
 def read_fasta(inputfile) -> object:
 
-    if not pathlib.Path(inputfile).exists(): raise Exception("Path " + str(inputfile) + " doesn't exist")
+    if not pathlib.Path(inputfile).exists():
+        raise Exception("Path " + str(inputfile) + " doesn't exist")
 
     read_file_array = []
 
@@ -127,15 +128,27 @@ def add_missing_names(fasta_array):
 
 def convert_to_obj_array(fasta_array):
 
-    index = 0
+    def test_item_pair(fasta_array, index):
+
+        if not fasta_array[index].startswith(">"):
+            return False
+        elif not re.match(r"^[a-zA-Z]", fasta_array[index + 1]):
+            return False
+        else:
+            return True
+
     object_array = []
+    index = 0
 
     if len(fasta_array) % 2 == 1:
         raise Exception("Unpaired ID and sequence")
 
     while index < len(fasta_array):
-        object_array.append(fasta_sequence(fasta_array[index], fasta_array[index + 1]))
-        index += 2
+        if test_item_pair(fasta_array, index):
+            object_array.append(fasta_sequence(fasta_array[index], fasta_array[index + 1]))
+            index += 2
+        else:
+            raise Exception("Unpaired ID and sequence")
 
     if not object_array:
         raise Exception("Object array failed")
