@@ -154,6 +154,10 @@ class TestFunctions(unittest.TestCase):
 
         with self.assertRaises(Exception) : ProcessFasta(get_test_dir_name()+"/inputs/test_ID_only.txt",False)
 
+    def test_class_method_ProcessFASTA_get_fasta_ID_only_single(self):
+
+        with self.assertRaises(Exception) : ProcessFasta(get_test_dir_name()+"/inputs/test_ID_only_single.txt",False)
+
     def test_func_validate_input(self):
 
         with self.assertRaises(Exception) : test_ID_sequence([])
