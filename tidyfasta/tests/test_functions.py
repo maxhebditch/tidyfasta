@@ -124,6 +124,10 @@ class TestFunctions(unittest.TestCase):
 
         with self.assertRaises(Exception) : convert_to_obj_array([])
 
+    def test_func_convert_to_obj_unpaired(self):
+
+        with self.assertRaises(Exception) : convert_to_obj_array([">DOG", "AAAAAA", ">CAT"])
+
     def test_class_method_ProcessFASTA_get_fasta_gold_standard(self):
 
         test_ProcessFasta = ProcessFasta(get_test_dir_name()+"/inputs/test_gold_standard.txt",False)
