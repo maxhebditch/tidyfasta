@@ -17,8 +17,6 @@ def identify_line_type(item):
 
 def read_fasta(inputfile) -> object:
 
-
-    if not isinstance(inputfile, str) : raise Exception("Provided file name must be a string")
     if not pathlib.Path(inputfile).exists(): raise Exception("Path " + str(inputfile) + " doesn't exist")
 
     read_file_array = []
@@ -126,9 +124,6 @@ def convert_to_obj_array(fasta_array):
 
     index = 0
     object_array = []
-
-    if not isinstance(fasta_array, list) : raise Exception("Non list passed")
-    if not fasta_array : raise Exception("Non list passed")
 
     while index < len(fasta_array):
         object_array.append(fasta_sequence(fasta_array[index], fasta_array[index + 1]))
