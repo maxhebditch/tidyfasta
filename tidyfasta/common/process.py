@@ -17,7 +17,8 @@ def identify_line_type(item):
 
 def read_fasta(inputfile) -> object:
 
-    if type(inputfile) != "string": raise Exception("Provided file name must be a string")
+
+    if not isinstance(inputfile, str) : raise Exception("Provided file name must be a string")
     if not pathlib.Path(inputfile).exists(): raise Exception("Path " + str(inputfile) + " doesn't exist")
 
     read_file_array = []
