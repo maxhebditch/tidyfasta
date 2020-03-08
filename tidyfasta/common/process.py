@@ -117,6 +117,7 @@ def add_missing_names(fasta_array):
             named_array.append(item)
             unknown_name = True
 
+    if not named_array: raise Exception("Named array issue")
     if len(named_array) % 2 == 1: raise Exception("Unpaired ID and sequence")
 
     return named_array
@@ -126,10 +127,14 @@ def convert_to_obj_array(fasta_array):
     index = 0
     object_array = []
 
+    if not isinstance(fasta_array, list) : raise Exception("Non list passed")
+    if not fasta_array : raise Exception("Non list passed")
+
     while index < len(fasta_array):
         object_array.append(fasta_sequence(fasta_array[index], fasta_array[index + 1]))
         index += 2
 
+    if not object_array : raise Exception("Object array failed")
     return object_array
 
 

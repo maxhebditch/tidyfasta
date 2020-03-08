@@ -116,6 +116,14 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual(test_array[0].sequence, obj0.sequence)
         self.assertEqual(test_array[1].sequence, obj1.sequence)
 
+    def test_func_convert_to_obj_not_list(self):
+
+        with self.assertRaises(Exception) : convert_to_obj_array("DOG")
+
+    def test_func_convert_to_obj_empty(self):
+
+        with self.assertRaises(Exception) : convert_to_obj_array([])
+
     def test_class_method_ProcessFASTA_get_fasta_gold_standard(self):
 
         test_ProcessFasta = ProcessFasta(get_test_dir_name()+"/inputs/test_gold_standard.txt",False)
