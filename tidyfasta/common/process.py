@@ -53,9 +53,10 @@ def combine_split_sequences(fasta_array):
             combined_array.append(item)
         else:
             combiner.append(item)
-    combined_array.append("".join(combiner))
+    if combiner:
+        combined_array.append("".join(combiner))
 
-    if len(combined_array) == 0: raise Exception("Combined array not generated")
+    if not combined_array: raise Exception("Combined array not generated")
 
     return combined_array
 

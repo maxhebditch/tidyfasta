@@ -49,6 +49,10 @@ class TestFunctions(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
+    def test_func_combine_split_sequences_empty(self):
+
+        with self.assertRaises(Exception) : combine_split_sequences([])
+
     def test_add_missing_names(self):
 
         input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL",
