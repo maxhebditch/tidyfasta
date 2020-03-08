@@ -57,6 +57,20 @@ class TestFunctions(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
+    def test_add_missing_names_uneven(self):
+
+        input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL",
+                       " ", "ATYYTYTY",
+                       "ATYYTYTY"]
+
+        test_array = add_missing_names(input_array)
+        ref_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL",
+                     "> sequence0", "ATYYTYTY",
+                     "> sequence1", "ATYYTYTY"]
+
+        self.assertEqual(ref_array, test_array)
+
+
     def test_convert_to_object_array(self):
 
         input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL",
