@@ -85,6 +85,7 @@ def remove_excess_whitespace(fasta_array):
                 else:
                     break
 
+    if not cleaned_array: raise Exception("Cleaned array not generated")
     return cleaned_array
 
 

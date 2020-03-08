@@ -41,6 +41,24 @@ class TestFunctions(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
+    def test_func_remove_excess_whitespace(self):
+
+        input_array = ["> alirocumab1", " ", "MVKVYAPASSANMSVGFDVLGAA",
+                     "   > alirocumab2", "   MVKVYAPASSANMSVGFDVLGAA",
+                     "> alirocumab3   ", "MVKVYAPASSANMSVGFDVLGAA", "", " ", " "]
+
+        test_array = remove_excess_whitespace(input_array)
+
+        ref_array = ["> alirocumab1", "MVKVYAPASSANMSVGFDVLGAA",
+                     "> alirocumab2", "MVKVYAPASSANMSVGFDVLGAA",
+                     "> alirocumab3", "MVKVYAPASSANMSVGFDVLGAA"]
+
+        self.assertEqual(ref_array, test_array)
+
+    def test_func_remove_excess_whitespace_empty_input(self):
+
+        with self.assertRaises(Exception) : remove_excess_whitespace([])
+
     def test_func_combine_split_sequences(self):
 
         input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL", "GAAVTPVDG", " ", ">SEQ 2", "ATYYTYTY"]
