@@ -25,7 +25,8 @@ def read_fasta(inputfile) -> object:
         for line in fasta:
             read_file_array.append(line.replace("\n", ""))
 
-    if len(read_file_array) == 0: raise Exception("No data in file")
+    if not read_file_array:
+        raise Exception("No data in file")
 
     return read_file_array
 
@@ -54,7 +55,8 @@ def combine_split_sequences(fasta_array):
     if combiner:
         combined_array.append("".join(combiner))
 
-    if not combined_array: raise Exception("Combined array not generated")
+    if not combined_array:
+        raise Exception("Combined array not generated")
 
     return combined_array
 
@@ -83,9 +85,10 @@ def remove_excess_whitespace(fasta_array):
                 else:
                     break
 
-    if not cleaned_array: raise Exception("Cleaned array not generated")
-    return cleaned_array
+    if not cleaned_array:
+        raise Exception("Cleaned array not generated")
 
+    return cleaned_array
 
 def add_missing_names(fasta_array):
 
@@ -115,8 +118,10 @@ def add_missing_names(fasta_array):
             named_array.append(item)
             unknown_name = True
 
-    if not named_array: raise Exception("Named array issue")
-    if len(named_array) % 2 == 1: raise Exception("Unpaired ID and sequence")
+    if not named_array:
+        raise Exception("Named array issue")
+    if len(named_array) % 2 == 1:
+        raise Exception("Unpaired ID and sequence")
 
     return named_array
 
@@ -125,21 +130,17 @@ def convert_to_obj_array(fasta_array):
     index = 0
     object_array = []
 
+    if len(fasta_array) % 2 == 1:
+        raise Exception("Unpaired ID and sequence")
+
     while index < len(fasta_array):
         object_array.append(fasta_sequence(fasta_array[index], fasta_array[index + 1]))
         index += 2
 
-    if not object_array : raise Exception("Object array failed")
+    if not object_array:
+        raise Exception("Object array failed")
+
     return object_array
-
-
-
-
-
-
-
-
-
 
 
 class ProcessFasta():
@@ -160,4 +161,3 @@ class ProcessFasta():
         except:
             raise(ValueError)
         return fasta_array
-
