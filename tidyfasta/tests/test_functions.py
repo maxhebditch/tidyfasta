@@ -150,6 +150,32 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual("> alirocumab3", test_array[2].ID)
         self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", test_array[2].sequence)
 
+    def test_func_validate_input(self):
+
+        with self.assertRaises(Exception) : test_ID_sequence([])
+
+    def test_func_validate_id_sequence_upper(self):
+
+        test_array = convert_to_obj_array(["> alirocumab", "aaaaaaaaaaaaaaaaaaa"])
+        test_ID_sequence(test_array)
+
+        self.assertEqual("> alirocumab", test_array[0].ID)
+        self.assertEqual("AAAAAAAAAAAAAAAAAAA", test_array[0].sequence)
+
+    def test_func_validate_id_sequence_bad_AA(self):
+
+        test_array = convert_to_obj_array(["> alirocumab", "AAAAAAXXXKKKKKK"])
+
+        with self.assertRaises(Exception) : test_id_sequence(test_array)
+
+    def test_func_validate_id_sequence_bad_AA_numbers(self):
+
+        test_array = convert_to_obj_array(["> alirocumab", "AAAAAA1KKKKK"])
+
+        with self.assertRaises(Exception) : test_id_sequence(test_array)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
