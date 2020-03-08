@@ -1,3 +1,4 @@
+import pathlib
 import re
 
 class fasta_sequence:
@@ -15,6 +16,10 @@ def identify_line_type(item):
         return "SEQUENCE"
 
 def read_fasta(inputfile) -> object:
+
+    if type(inputfile) != "string": raise Exception("Provided file name must be a string")
+    if not pathlib.Path(inputfile).exists(): raise Exception("Path " + str(inputfile) + " doesn't exist")
+
     read_file_array = []
 
     with open(inputfile, "r") as fasta:
@@ -48,6 +53,8 @@ def combine_split_sequences(fasta_array):
         else:
             combiner.append(item)
     combined_array.append("".join(combiner))
+
+    if len(combined_array) == 0: raise Exception("Combined array not generated")
 
     return combined_array
 

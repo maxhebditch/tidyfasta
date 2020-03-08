@@ -18,9 +18,17 @@ class TestFunctions(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
-    def test_func_read_fasta(self):
+    def test_func_read_fasta_empty(self):
 
         with self.assertRaises(Exception) : read_fasta(get_test_dir_name()+"/inputs/test_empty.txt")
+
+    def test_func_read_fasta_not_str(self):
+
+        with self.assertRaises(Exception) : read_fasta(0)
+
+    def test_func_read_fasta_path_not_exists(self):
+
+        with self.assertRaises(Exception) : read_fasta("I_DONT_EXIST.txt")
 
     def test_func_read_fasta_excess_whitespace_multi(self):
 
