@@ -204,5 +204,14 @@ class UnitTests(unittest.TestCase):
         self.assertEqual("> alirocumab3", valid_array[2].ID)
         self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", valid_array[2].sequence)
 
+    def test_class_method_ProcessFASTA_get_fasta_ID_only(self):
+
+        with self.assertRaises(Exception) : ProcessFasta(get_test_dir() + "/inputs/test_ID_only.txt", False, False)
+
+    def test_class_method_ProcessFASTA_get_fasta_ID_only_single(self):
+
+        with self.assertRaises(Exception) : ProcessFasta(get_test_dir() + "/inputs/test_ID_only_single.txt",
+                                                         False, False)
+
 if __name__ == '__main__':
     unittest.main()

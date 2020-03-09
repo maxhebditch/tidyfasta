@@ -8,7 +8,7 @@ def get_test_dir():
 
 class IntegrationTests(unittest.TestCase):
 
-    def test_class_method_ProcessFASTA_get_fasta_gold_standard(self):
+    def ProcessFASTA_test_gold_standard(self):
 
         input_file = get_test_dir() + "/inputs/test_gold_standard.txt"
         output_file = get_outputfile(input_file)
@@ -26,7 +26,7 @@ class IntegrationTests(unittest.TestCase):
         finally:
             os.remove(renamed_file)
 
-    def test_class_method_ProcessFASTA_get_fasta_gold_standard(self):
+    def ProcessFASTA_test_gold_standard_multi(self):
 
         input_file = get_test_dir() + "/inputs/test_gold_standard_multiple.txt"
         output_file = get_outputfile(input_file)
@@ -46,14 +46,6 @@ class IntegrationTests(unittest.TestCase):
 
 
 
-    def test_class_method_ProcessFASTA_get_fasta_ID_only(self):
-
-        with self.assertRaises(Exception) : ProcessFasta(get_test_dir() + "/inputs/test_ID_only.txt", False, False)
-
-    def test_class_method_ProcessFASTA_get_fasta_ID_only_single(self):
-
-        with self.assertRaises(Exception) : ProcessFasta(get_test_dir() + "/inputs/test_ID_only_single.txt",
-                                                         False, False)
 
 if __name__ == '__main__':
     unittest.main()
