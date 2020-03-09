@@ -165,7 +165,12 @@ def convert_to_obj_array(fasta_array):
             object_array.append(fasta_sequence(fasta_array[index], fasta_array[index + 1]))
             index += 2
         else:
-            raise Exception("Issue generating object array")
+            if identify_line_type(fasta_array[index]) != "ID":
+                raise Exception("Issue identifying ID")
+            elif identify_line_type(fasta_array[index+1]) != "SEQUENCE":
+                raise Exception("ID without sequence")
+            else:
+                raise Exception("Object array failed")
 
     if not object_array:
         raise Exception("Object array failed")
@@ -181,17 +186,22 @@ def test_ID_sequence(single, strict, fasta_array):
         raise Exception("More than 1 sequence present and single mode activated")
 
     validated_array = []
+
     non_canonical_AA = re.compile(r"[^ACDEFGHIKLMNPQRSTVWY]")
+    bad_id_chars = re.compile(r"[^>a-zA-Z0-9_\s-]")
 
     for fasta_object in fasta_array:
 
         fasta_object.sequence = fasta_object.sequence.upper()
 
-        if non_canonical_AA.search(fasta_object.sequence):
-            if strict:
+        if strict:
+            if non_canonical_AA.search(fasta_object.sequence):
                 raise Exception("Non canonical amino acids detected and strict mode activated")
+            if bad_id_chars.search(fasta_object.ID):
+                raise Exception("Bad characters in ID and strict mode activated")
         else:
-            validated_array.append(fasta_object)
+            if not non_canonical_AA.search(fasta_object.sequence):
+                validated_array.append(fasta_object)
 
     if len(validated_array) == 0:
         raise Exception("No valid AA in input")

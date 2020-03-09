@@ -12,17 +12,17 @@ class UnitTests(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
+    def test_func_read_fasta_path_not_exists(self):
+
+        with self.assertRaisesRegex(Exception, "doesn't exist") : read_fasta("I_DONT_EXIST.txt")
+
     def test_func_read_fasta_empty(self):
 
-        with self.assertRaises(Exception) : read_fasta(get_test_dir()+"/inputs/test_empty.txt")
+        with self.assertRaisesRegex(Exception, "No data in file") : read_fasta(get_test_dir()+"/inputs/test_empty.txt")
 
     def test_func_read_fasta_not_str(self):
 
-        with self.assertRaises(Exception) : read_fasta(0)
-
-    def test_func_read_fasta_path_not_exists(self):
-
-        with self.assertRaises(Exception) : read_fasta("I_DONT_EXIST.txt")
+        with self.assertRaisesRegex(TypeError, "not int") : read_fasta(0)
 
     def test_func_read_fasta_excess_whitespace_multi(self):
 
@@ -51,7 +51,7 @@ class UnitTests(unittest.TestCase):
 
     def test_func_remove_excess_whitespace_empty_input(self):
 
-        with self.assertRaises(Exception) : remove_excess_whitespace([])
+        with self.assertRaisesRegex(Exception, "Cleaned array not generated") : remove_excess_whitespace([])
 
     def test_func_combine_split_sequences(self):
 
@@ -63,7 +63,7 @@ class UnitTests(unittest.TestCase):
 
     def test_func_combine_split_sequences_empty(self):
 
-        with self.assertRaises(Exception) : combine_split_sequences([])
+        with self.assertRaisesRegex(Exception, "Combined array not generated") : combine_split_sequences([])
 
     def test_add_missing_names(self):
 
@@ -112,19 +112,24 @@ class UnitTests(unittest.TestCase):
 
     def test_func_convert_to_obj_not_list(self):
 
-        with self.assertRaises(Exception) : convert_to_obj_array("DOG")
-
-    def test_func_convert_to_obj_empty(self):
-
-        with self.assertRaises(Exception) : convert_to_obj_array([])
+        with self.assertRaisesRegex(Exception, "Unpaired ID and sequence") : convert_to_obj_array("DOG")
 
     def test_func_convert_to_obj_unpaired(self):
 
-        with self.assertRaises(Exception) : convert_to_obj_array([">DOG", "AAAAAA", ">CAT"])
+        with self.assertRaisesRegex(Exception, "Unpaired ID and sequence") \
+                : convert_to_obj_array([">DOG", "AAAAAA", ">CAT"])
+
+    def test_func_convert_to_obj_empty(self):
+
+        with self.assertRaisesRegex(Exception, "Object array failed") : convert_to_obj_array([])
+
+    def test_func_validate_input_no_bools(self):
+
+        with self.assertRaisesRegex(TypeError, "missing 2 required positional") : test_ID_sequence([])
 
     def test_func_validate_input(self):
 
-        with self.assertRaises(Exception) : test_ID_sequence([])
+        with self.assertRaisesRegex(Exception, "Input array empty") : test_ID_sequence(False, True, [])
 
     def test_func_validate_id_sequence_upper(self):
 
@@ -134,29 +139,30 @@ class UnitTests(unittest.TestCase):
         self.assertEqual("> alirocumab", valid_array[0].ID)
         self.assertEqual("AAAAAAAAAAAAAAAAAAA", valid_array[0].sequence)
 
+    def test_func_validate_id_sequence_bad_ID(self):
+
+        test_array = convert_to_obj_array(["> alir<cumab", "AAAAAAKKKKK"])
+        with self.assertRaisesRegex(Exception, "Bad characters in ID") : test_ID_sequence(False, True, test_array)
+
     def test_func_validate_id_sequence_bad_AA(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAXXXKKKKKK"])
-
-        with self.assertRaises(Exception) : test_ID_sequence(test_array)
+        with self.assertRaisesRegex(Exception, "Non canonical amino acids") : test_ID_sequence(False, True, test_array)
 
     def test_func_validate_id_sequence_bad_AA_numbers(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "aaaaaa1KKKKK"])
-
-        with self.assertRaises(Exception) : test_ID_sequence(False, True, test_array)
+        with self.assertRaisesRegex(Exception, "Non canonical amino acids") : test_ID_sequence(False, True, test_array)
 
     def test_func_validate_id_sequence_bad_AA_space(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAA KKKKK"])
-
-        with self.assertRaises(Exception) : test_ID_sequence(False, True, test_array)
+        with self.assertRaisesRegex(Exception, "Non canonical amino acids") : test_ID_sequence(False, True, test_array)
 
     def test_func_validate_id_sequence_bad_AA_numbers_nonstrict(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAK1KKKK",
                                            "> secondone", "TTTTTTTT"])
-
         valid_array = test_ID_sequence(False, False, test_array)
 
         self.assertEqual(len(valid_array), 1)
@@ -165,8 +171,8 @@ class UnitTests(unittest.TestCase):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAKKKKK",
                                            "> secondone", "TTTTTTTT"])
-
-        with self.assertRaises(Exception) : test_ID_sequence(True, True, test_array)
+        with self.assertRaisesRegex(Exception, "More than 1 sequence present") \
+                : test_ID_sequence(True, True, test_array)
 
     def test_func_write_FASTA(self):
 
@@ -206,12 +212,14 @@ class UnitTests(unittest.TestCase):
 
     def test_class_method_ProcessFASTA_get_fasta_ID_only(self):
 
-        with self.assertRaises(Exception) : ProcessFasta(get_test_dir() + "/inputs/test_ID_only.txt", False, False)
+        fasta_array = read_fasta(get_test_dir() + "/inputs/test_ID_only.txt")
+        with self.assertRaisesRegex(Exception, "ID without sequence") : convert_to_obj_array(fasta_array)
 
     def test_class_method_ProcessFASTA_get_fasta_ID_only_single(self):
 
-        with self.assertRaises(Exception) : ProcessFasta(get_test_dir() + "/inputs/test_ID_only_single.txt",
-                                                         False, False)
+        fasta_array = read_fasta(get_test_dir() + "/inputs/test_ID_only_single.txt")
+        with self.assertRaisesRegex(Exception, "Unpaired ID and sequence") : convert_to_obj_array(fasta_array)
+
 
 if __name__ == '__main__':
     unittest.main()
