@@ -160,22 +160,30 @@ def test_ID_sequence(fasta_array):
     if not fasta_array:
         raise Exception("Input array empty")
 
+    validated_array = []
+
     for fasta_object in fasta_array:
 
         fasta_object.sequence = fasta_object.sequence.upper()
 
         if re.match(r"XZUOJ", fasta_object.sequence):
-            raise Exception("Non canonical amino acids detected")
+            if fasta_object.strict:
+                raise Exception("Non canonical amino acids detected")
+        else:
+            validated_array.append(fasta_object)
+
+    return validated_array
 
 
 class ProcessFasta():
 
-    def __init__(self, inputfile, single):
+    def __init__(self, inputfile, single, strict):
         self.inputfile = inputfile
         self.single = single
+        self.strict = strict
 
         self.fasta_array = self.get_fasta()
-        self.validate_FASTA()
+        self.validated_array = self.validate_FASTA()
 
     def get_fasta(self):
         try:
@@ -183,13 +191,14 @@ class ProcessFasta():
             fasta_array = combine_split_sequences(fasta_array)
             fasta_array = remove_excess_whitespace(fasta_array)
             fasta_array = add_missing_names(fasta_array)
-            fasta_array = convert_to_obj_array(fasta_array)
         except:
             raise(ValueError)
         return fasta_array
 
     def validate_FASTA(self):
         try:
-            test_ID_sequence(self.fasta_array)
+            object_array = convert_to_obj_array(self.fasta_array)
+            validated_array = test_ID_sequence(object_array)
         except:
             raise(ValueError)
+        return validated_array
