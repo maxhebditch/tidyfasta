@@ -155,22 +155,29 @@ def convert_to_obj_array(fasta_array):
 
     return object_array
 
-def test_ID_sequence(ProcessFasta, fasta_array):
+def test_ID_sequence(single, strict, fasta_array):
 
     if not fasta_array:
         raise Exception("Input array empty")
 
+    if single and len(fasta_array) > 1:
+        raise Exception("More than 1 sequence present and single mode activated")
+
     validated_array = []
+    non_canonical_AA = re.compile(r"[^ACDEFGHIKLMNPQRSTVWY]")
 
     for fasta_object in fasta_array:
 
         fasta_object.sequence = fasta_object.sequence.upper()
 
-        if re.match(r"XZUOJ", fasta_object.sequence):
-            if ProcessFasta.strict:
-                raise Exception("Non canonical amino acids detected")
+        if non_canonical_AA.search(fasta_object.sequence):
+            if strict:
+                raise Exception("Non canonical amino acids detected and strict mode activated")
         else:
             validated_array.append(fasta_object)
+
+    if len(validated_array) == 0:
+        raise Exception("No valid AA in input")
 
     return validated_array
 
@@ -198,7 +205,7 @@ class ProcessFasta():
     def validate_FASTA(self):
         try:
             object_array = convert_to_obj_array(self.fasta_array)
-            validated_array = test_ID_sequence(self, object_array)
+            validated_array = test_ID_sequence(self.single, self.strict, object_array)
         except:
             raise(ValueError)
         return validated_array

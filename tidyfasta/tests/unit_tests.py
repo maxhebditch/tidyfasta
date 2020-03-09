@@ -135,22 +135,38 @@ class UnitTests(unittest.TestCase):
     def test_func_validate_id_sequence_upper(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "aaaaaaaaaaaaaaaaaaa"])
-        test_ID_sequence(test_array)
+        valid_array = test_ID_sequence(False, False, test_array)
 
-        self.assertEqual("> alirocumab", test_array[0].ID)
-        self.assertEqual("AAAAAAAAAAAAAAAAAAA", test_array[0].sequence)
+        self.assertEqual("> alirocumab", valid_array[0].ID)
+        self.assertEqual("AAAAAAAAAAAAAAAAAAA", valid_array[0].sequence)
 
     def test_func_validate_id_sequence_bad_AA(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAXXXKKKKKK"])
 
-        with self.assertRaises(Exception) : test_id_sequence(test_array)
+        with self.assertRaises(Exception) : test_ID_sequence(test_array)
 
     def test_func_validate_id_sequence_bad_AA_numbers(self):
 
-        test_array = convert_to_obj_array(["> alirocumab", "AAAAAA1KKKKK"])
+        test_array = convert_to_obj_array(["> alirocumab", "aaaaaa1KKKKK"])
 
-        with self.assertRaises(Exception) : test_id_sequence(test_array)
+        with self.assertRaises(Exception) : test_ID_sequence(False, True, test_array)
+
+    def test_func_validate_id_sequence_bad_AA_numbers_nonstrict(self):
+
+        test_array = convert_to_obj_array(["> alirocumab", "AAAAAAK1KKKK",
+                                           "> secondone", "TTTTTTTT"])
+
+        valid_array = test_ID_sequence(False, False, test_array)
+
+        self.assertEqual(len(valid_array), 1)
+
+    def test_func_test_single(self):
+
+        test_array = convert_to_obj_array(["> alirocumab", "AAAAAAKKKKK",
+                                           "> secondone", "TTTTTTTT"])
+
+        with self.assertRaises(Exception) : test_ID_sequence(True, False, test_array)
 
 
 if __name__ == '__main__':
