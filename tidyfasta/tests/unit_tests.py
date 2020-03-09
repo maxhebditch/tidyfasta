@@ -152,6 +152,12 @@ class UnitTests(unittest.TestCase):
 
         with self.assertRaises(Exception) : test_ID_sequence(False, True, test_array)
 
+    def test_func_validate_id_sequence_bad_AA_space(self):
+
+        test_array = convert_to_obj_array(["> alirocumab", "AAAAA KKKKK"])
+
+        with self.assertRaises(Exception) : test_ID_sequence(False, True, test_array)
+
     def test_func_validate_id_sequence_bad_AA_numbers_nonstrict(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAK1KKKK",
