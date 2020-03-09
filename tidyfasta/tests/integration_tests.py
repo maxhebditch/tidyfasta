@@ -16,12 +16,12 @@ class IntegrationTests(unittest.TestCase):
         new = ProcessFasta(input_file, False, False)
         new.write_FASTA()
 
+        renamed_file = get_test_dir() + "/outputs/test_broken_lines.txt"
+        os.rename(output_file, renamed_file)
+
+        standard_file = get_test_dir() + "/standards/test_broken_lines.txt"
+
         try:
-            renamed_file = get_test_dir() + "/outputs/test_broken_lines.txt"
-            os.rename(output_file, renamed_file)
-
-            standard_file = get_test_dir() + "/standards/test_broken_lines.txt"
-
             self.assertTrue(filecmp.cmp(renamed_file, standard_file, shallow=False))
         finally:
             os.remove(renamed_file)
@@ -34,12 +34,12 @@ class IntegrationTests(unittest.TestCase):
         new = ProcessFasta(input_file, False, False)
         new.write_FASTA()
 
+        renamed_file = get_test_dir() + "/outputs/test_broken_lines_multiple.txt"
+        os.rename(output_file, renamed_file)
+
+        standard_file = get_test_dir() + "/standards/test_broken_lines_multiple.txt"
+
         try:
-            renamed_file = get_test_dir() + "/outputs/test_broken_lines_multiple.txt"
-            os.rename(output_file, renamed_file)
-
-            standard_file = get_test_dir() + "/standards/test_broken_lines_multiple.txt"
-
             self.assertTrue(filecmp.cmp(renamed_file, standard_file, shallow=False))
         finally:
             os.remove(renamed_file)
@@ -52,15 +52,55 @@ class IntegrationTests(unittest.TestCase):
         new = ProcessFasta(input_file, True, False)
         new.write_FASTA()
 
+        renamed_file = get_test_dir() + "/outputs/test_broken_lines_multiple.txt"
+        os.rename(output_file, renamed_file)
+
+        standard_file = get_test_dir() + "/standards/test_broken_lines.txt"
+
         try:
-            renamed_file = get_test_dir() + "/outputs/test_broken_lines_multiple.txt"
-            os.rename(output_file, renamed_file)
-
-            standard_file = get_test_dir() + "/standards/test_broken_lines.txt"
-
             self.assertTrue(filecmp.cmp(renamed_file, standard_file, shallow=False))
         finally:
             os.remove(renamed_file)
+
+    def test_ProcessFASTA_excess_whitespace(self):
+
+        input_file = get_test_dir() + "/inputs/test_excess_whitespace_end.txt"
+        output_file = get_outputfile(input_file)
+
+        new = ProcessFasta(input_file, True, False)
+        new.write_FASTA()
+
+        renamed_file = get_test_dir() + "/outputs/test_excess_whitespace_end.txt"
+        os.rename(output_file, renamed_file)
+
+        standard_file = get_test_dir() + "/standards/test_excess_whitespace_end.txt"
+
+        try:
+            self.assertTrue(filecmp.cmp(renamed_file, standard_file, shallow=False))
+        finally:
+            os.remove(renamed_file)
+
+    def test_ProcessFASTA_excess_whitespace_mid(self):
+
+        input_file = get_test_dir() + "/inputs/test_excess_whitespace_mid.txt"
+        output_file = get_outputfile(input_file)
+
+        new = ProcessFasta(input_file, False, False)
+        new.write_FASTA()
+
+        renamed_file = get_test_dir() + "/outputs/test_excess_whitespace_mid.txt"
+        os.rename(output_file, renamed_file)
+
+        standard_file = get_test_dir() + "/standards/test_excess_whitespace_mid.txt"
+
+        try:
+            self.assertTrue(filecmp.cmp(renamed_file, standard_file, shallow=False))
+        finally:
+            os.remove(renamed_file)
+
+
+
+
 
 
 
