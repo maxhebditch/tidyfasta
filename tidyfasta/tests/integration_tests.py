@@ -98,6 +98,23 @@ class IntegrationTests(unittest.TestCase):
         finally:
             os.remove(renamed_file)
 
+    def test_ProcessFASTA_excess_whitespace_mid(self):
+
+        input_file = get_test_dir() + "/inputs/test_missing_name.txt"
+        output_file = get_outputfile(input_file)
+
+        new = ProcessFasta(input_file, False, False)
+        new.write_FASTA()
+
+        renamed_file = get_test_dir() + "/outputs/test_missing_name.txt"
+        os.rename(output_file, renamed_file)
+
+        standard_file = get_test_dir() + "/standards/test_missing_name.txt"
+
+        try:
+            self.assertTrue(filecmp.cmp(renamed_file, standard_file, shallow=False))
+        finally:
+            os.remove(renamed_file)
 
 
 
