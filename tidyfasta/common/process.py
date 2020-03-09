@@ -1,6 +1,8 @@
 import pathlib
 import re
 import os
+import time
+
 
 class fasta_sequence:
     def __init__(self, ID, sequence):
@@ -15,6 +17,20 @@ def identify_line_type(item):
         return "WHITESPACE"
     elif re.match(r"[a-zA-Z0-9]", item):
         return "SEQUENCE"
+
+def get_outputfile(inputfile):
+    split_path = os.path.split(inputfile)
+
+    if not os.path.exists(split_path[0]):
+        raise Exception("Output location: " + split_path[0] + " does not exist")
+
+    candidate_output_file = split_path[0]+"/tidied-"+split_path[1]
+
+    if os.path.exists(candidate_output_file):
+        unix_timestamp = int(time.time())
+        os.rename(candidate_output_file, split_path[0]+"/tidied-"+str(unix_timestamp)+"-"+split_path[1])
+
+    return candidate_output_file
 
 def read_fasta(inputfile) -> object:
 
@@ -184,25 +200,12 @@ def test_ID_sequence(single, strict, fasta_array):
 
 def write_FASTA(inputfile, validated_array):
 
-    def get_outputfile(inputfile):
-        split_path = os.path.split(inputfile)
-
-        if not os.path.exists(split_path[0]):
-            raise Exception("Output location: " + split_path[0] + " does not exist")
-
-        candidate_output_file = split_path[0]+"/tidied-"+split_path[1]
-
-        if os.path.exists(candidate_output_file):
-            unix_timestamp = datetime.datetime.now()
-            os.rename(candidate_output_file, split_path[0]+"/tidied-"+str(unix_timestamp)+"-"+split_path[1])
-
-        return candidate_output_file
-
     outputfile = get_outputfile(inputfile)
 
-
+    index = 0
     with open(outputfile, "w") as output:
-        for index, object in enumerate(validated_array):
+        for object in validated_array:
+            index += 1
             output.write(object.ID+"\n")
             if index == len(validated_array):
                 output.write(object.sequence+"\n")
