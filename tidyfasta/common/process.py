@@ -148,7 +148,7 @@ def convert_to_obj_array(fasta_array):
             object_array.append(fasta_sequence(fasta_array[index], fasta_array[index + 1]))
             index += 2
         else:
-            raise Exception("Unpaired ID and sequence")
+            raise Exception("Issue generating object array")
 
     if not object_array:
         raise Exception("Object array failed")
