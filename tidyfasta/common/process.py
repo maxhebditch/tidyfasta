@@ -177,7 +177,7 @@ def test_ID_sequence(single, strict, fasta_array):
     if not fasta_array:
         raise Exception("Input array empty")
 
-    if single and len(fasta_array) > 1:
+    if single and strict and len(fasta_array) > 1:
         raise Exception("More than 1 sequence present and single mode activated")
 
     validated_array = []
@@ -195,6 +195,9 @@ def test_ID_sequence(single, strict, fasta_array):
 
     if len(validated_array) == 0:
         raise Exception("No valid AA in input")
+
+    if single and len(validated_array) > 1:
+        validated_array = [validated_array[0]]
 
     return validated_array
 
