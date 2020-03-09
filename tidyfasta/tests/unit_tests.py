@@ -9,7 +9,7 @@ from tidyfasta.common.process import *
 def get_test_dir_name():
     return os.path.dirname(os.path.realpath(__file__))
 
-class TestFunctions(unittest.TestCase):
+class UnitTests(unittest.TestCase):
 
     def test_func_read_fasta(self):
 
@@ -128,36 +128,6 @@ class TestFunctions(unittest.TestCase):
 
         with self.assertRaises(Exception) : convert_to_obj_array([">DOG", "AAAAAA", ">CAT"])
 
-    def test_class_method_ProcessFASTA_get_fasta_gold_standard(self):
-
-        test_ProcessFasta = ProcessFasta(get_test_dir_name()+"/inputs/test_gold_standard.txt",False)
-
-        test_array = test_ProcessFasta.get_fasta()
-
-        self.assertEqual("> alirocumab", test_array[0].ID)
-        self.assertEqual("MVKVYAPASSANMSVGFDVLGAAVTPVDGALLGDVVTVEAAETF", test_array[0].sequence)
-
-    def test_class_method_ProcessFASTA_get_fasta_excess_whitespace_multi(self):
-
-        test_ProcessFasta = ProcessFasta(get_test_dir_name()+"/inputs/test_excess_whitespace_multi.txt",False)
-
-        test_array = test_ProcessFasta.get_fasta()
-
-        self.assertEqual("> alirocumab1", test_array[0].ID)
-        self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", test_array[0].sequence)
-        self.assertEqual("> alirocumab2", test_array[1].ID)
-        self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", test_array[1].sequence)
-        self.assertEqual("> alirocumab3", test_array[2].ID)
-        self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", test_array[2].sequence)
-
-    def test_class_method_ProcessFASTA_get_fasta_ID_only(self):
-
-        with self.assertRaises(Exception) : ProcessFasta(get_test_dir_name()+"/inputs/test_ID_only.txt",False)
-
-    def test_class_method_ProcessFASTA_get_fasta_ID_only_single(self):
-
-        with self.assertRaises(Exception) : ProcessFasta(get_test_dir_name()+"/inputs/test_ID_only_single.txt",False)
-
     def test_func_validate_input(self):
 
         with self.assertRaises(Exception) : test_ID_sequence([])
@@ -181,8 +151,6 @@ class TestFunctions(unittest.TestCase):
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAA1KKKKK"])
 
         with self.assertRaises(Exception) : test_id_sequence(test_array)
-
-
 
 
 if __name__ == '__main__':
