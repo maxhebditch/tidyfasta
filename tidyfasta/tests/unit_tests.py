@@ -7,14 +7,14 @@ class UnitTests(unittest.TestCase):
 
     def test_func_read_fasta(self):
 
-        test_array = read_fasta(get_test_dir_name()+"/inputs/test_gold_short.txt")
+        test_array = read_fasta(get_test_dir()+"/inputs/test_gold_short.txt")
         ref_array = ["> alirocumab","MVKVYAPASSANMSVGFDVL","GAAVTPVDG"]
 
         self.assertEqual(ref_array, test_array)
 
     def test_func_read_fasta_empty(self):
 
-        with self.assertRaises(Exception) : read_fasta(get_test_dir_name()+"/inputs/test_empty.txt")
+        with self.assertRaises(Exception) : read_fasta(get_test_dir()+"/inputs/test_empty.txt")
 
     def test_func_read_fasta_not_str(self):
 
@@ -26,7 +26,7 @@ class UnitTests(unittest.TestCase):
 
     def test_func_read_fasta_excess_whitespace_multi(self):
 
-        input_array = read_fasta(get_test_dir_name()+"/inputs/test_excess_whitespace_multi.txt")
+        input_array = read_fasta(get_test_dir()+"/inputs/test_excess_whitespace_multi.txt")
         test_array = remove_excess_whitespace(input_array)
 
         ref_array = ["> alirocumab1", "MVKVYAPASSANMSVGFDVLGAA",
@@ -166,15 +166,15 @@ class UnitTests(unittest.TestCase):
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAKKKKK",
                                            "> secondone", "TTTTTTTT"])
 
-        with self.assertRaises(Exception) : test_ID_sequence(True, False, test_array)
+        with self.assertRaises(Exception) : test_ID_sequence(True, True, test_array)
 
     def test_func_write_FASTA(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAKKKKK",
                                            "> secondone", "TTTTTTTT"])
-        write_FASTA(get_test_dir_name() + "/outputs/test-write.txt", test_array)
+        write_FASTA(get_test_dir() + "/outputs/test-write.txt", test_array)
 
-        output_file = get_test_dir_name() + "/outputs/tidied-test-write.txt"
+        output_file = get_test_dir() + "/outputs/tidied-test-write.txt"
 
         assert(os.path.exists(output_file))
 
