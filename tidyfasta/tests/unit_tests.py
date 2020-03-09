@@ -174,6 +174,20 @@ class UnitTests(unittest.TestCase):
 
         with self.assertRaises(Exception) : test_ID_sequence(True, False, test_array)
 
+    def test_func_write_FASTA(self):
+
+        test_array = convert_to_obj_array(["> alirocumab", "AAAAAAKKKKK",
+                                           "> secondone", "TTTTTTTT"])
+        write_FASTA(get_test_dir_name() + "/outputs/test-write.txt", test_array)
+
+        output_file = get_test_dir_name() + "/outputs/tidied-test-write.txt"
+
+        assert(os.path.exists(output_file))
+
+        os.remove(output_file)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()

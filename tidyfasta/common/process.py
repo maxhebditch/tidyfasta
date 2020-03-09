@@ -1,5 +1,6 @@
 import pathlib
 import re
+import os
 
 class fasta_sequence:
     def __init__(self, ID, sequence):
@@ -181,6 +182,33 @@ def test_ID_sequence(single, strict, fasta_array):
 
     return validated_array
 
+def write_FASTA(inputfile, validated_array):
+
+    def get_outputfile(inputfile):
+        split_path = os.path.split(inputfile)
+
+        if not os.path.exists(split_path[0]):
+            raise Exception("Output location: " + split_path[0] + " does not exist")
+
+        candidate_output_file = split_path[0]+"/tidied-"+split_path[1]
+
+        if os.path.exists(candidate_output_file):
+            unix_timestamp = datetime.datetime.now()
+            os.rename(candidate_output_file, split_path[0]+"/tidied-"+str(unix_timestamp)+"-"+split_path[1])
+
+        return candidate_output_file
+
+    outputfile = get_outputfile(inputfile)
+
+
+    with open(outputfile, "w") as output:
+        for index, object in enumerate(validated_array):
+            output.write(object.ID+"\n")
+            if index == len(validated_array):
+                output.write(object.sequence+"\n")
+            else:
+                output.write(object.sequence+"\n\n")
+
 
 class ProcessFasta():
 
@@ -209,3 +237,9 @@ class ProcessFasta():
         except:
             raise(ValueError)
         return validated_array
+
+    def write_FASTA(self):
+        try:
+            write_FASTA(self.inputfile, self.validated_array)
+        except:
+            raise(ValueError)
