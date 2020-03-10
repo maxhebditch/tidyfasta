@@ -16,6 +16,9 @@
 | Lowercase AA                | Converts to uppercase AA                |
 | Excessive Whitespace        | Removes excessive whitespace            | 
 
+## Install
+
+    pip install tidyfasta
 
 ## Usage
 
