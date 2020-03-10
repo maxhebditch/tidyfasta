@@ -1,4 +1,5 @@
 import unittest
+import os
 
 from tidyfasta.common.process import *
 from tidyfasta.tests.integration_tests import get_test_dir
@@ -104,14 +105,10 @@ class UnitTests(unittest.TestCase):
         obj0 = FastaSequence("> alirocumab", "MVKVYAPASSANMSVGFDVL")
         obj1 = FastaSequence("> sequence1", "GGGGGGGG")
 
-        self.assertEqual(test_array[0].ID, obj0.ID)
-        self.assertEqual(test_array[1].ID, obj1.ID)
+        self.assertEqual(test_array[0].id, obj0.id)
+        self.assertEqual(test_array[1].id, obj1.id)
         self.assertEqual(test_array[0].sequence, obj0.sequence)
         self.assertEqual(test_array[1].sequence, obj1.sequence)
-
-    def test_func_convert_to_obj_not_list(self):
-
-        with self.assertRaisesRegex(Exception, "Unpaired ID and sequence") : convert_to_obj_array("DOG")
 
     def test_func_convert_to_obj_unpaired(self):
 
@@ -122,10 +119,6 @@ class UnitTests(unittest.TestCase):
 
         with self.assertRaisesRegex(Exception, "Object array failed") : convert_to_obj_array([])
 
-    def test_func_validate_input_no_bools(self):
-
-        with self.assertRaisesRegex(TypeError, "missing 1 required positional") : test_id_sequence([])
-
     def test_func_validate_input(self):
 
         with self.assertRaisesRegex(Exception, "No valid AA in input") : test_id_sequence(True, [])
@@ -135,7 +128,7 @@ class UnitTests(unittest.TestCase):
         test_array = convert_to_obj_array(["> alirocumab", "aaaaaaaaaaaaaaaaaaa"])
         valid_array = test_id_sequence(False, test_array)
 
-        self.assertEqual("> alirocumab", valid_array[0].ID)
+        self.assertEqual("> alirocumab", valid_array[0].id)
         self.assertEqual("AAAAAAAAAAAAAAAAAAA", valid_array[0].sequence)
 
     def test_func_validate_id_sequence_bad_ID(self):
@@ -186,12 +179,13 @@ class UnitTests(unittest.TestCase):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAKKKKK",
                                            "> secondone", "TTTTTTTT"])
-        write_FASTA(get_test_dir() + "/outputs/test-write.txt", test_array)
+        write_fasta(get_test_dir() + "/outputs/test-write.txt", test_array)
 
         output_file = get_test_dir() + "/outputs/tidied-test-write.txt"
 
         try:
-            self.assertEqual(1, os.path.exists(output_file))
+            path_exists = os.path.exists(output_file)
+            self.assertEqual(1, path_exists)
         finally:
             os.remove(output_file)
 
@@ -200,9 +194,9 @@ class UnitTests(unittest.TestCase):
         test_processfasta = ProcessFasta(get_test_dir() + "/inputs/test_gold_standard.txt", False, False)
 
         test_processfasta.get_fasta()
-        valid_array = test_processfasta.validate_FASTA()
+        valid_array = test_processfasta.validate_fasta()
 
-        self.assertEqual("> alirocumab", valid_array[0].ID)
+        self.assertEqual("> alirocumab", valid_array[0].id)
         self.assertEqual("MVKVYAPASSANMSVGFDVLGAAVTPVDGALLGDVVTVEAAETF", valid_array[0].sequence)
 
     def test_class_method_ProcessFASTA_get_fasta_excess_whitespace_multi(self):
@@ -210,13 +204,13 @@ class UnitTests(unittest.TestCase):
         test_processfasta = ProcessFasta(get_test_dir() + "/inputs/test_excess_whitespace_multi.txt", False, False)
 
         test_processfasta.get_fasta()
-        valid_array = test_processfasta.validate_FASTA()
+        valid_array = test_processfasta.validate_fasta()
 
-        self.assertEqual("> alirocumab1", valid_array[0].ID)
+        self.assertEqual("> alirocumab1", valid_array[0].id)
         self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", valid_array[0].sequence)
-        self.assertEqual("> alirocumab2", valid_array[1].ID)
+        self.assertEqual("> alirocumab2", valid_array[1].id)
         self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", valid_array[1].sequence)
-        self.assertEqual("> alirocumab3", valid_array[2].ID)
+        self.assertEqual("> alirocumab3", valid_array[2].id)
         self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", valid_array[2].sequence)
 
     def test_class_method_ProcessFASTA_get_fasta_ID_only(self):

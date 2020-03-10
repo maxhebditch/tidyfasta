@@ -5,8 +5,8 @@ import time
 
 
 class FastaSequence:
-    def __init__(self, ID, sequence):
-        self.ID = ID
+    def __init__(self, id, sequence):
+        self.id = id
         self.sequence = sequence
 
 
@@ -176,7 +176,7 @@ def test_id_sequence(strict, fasta_array):
 
     validated_array = []
 
-    non_canonical_AA = re.compile(r"[^ACDEFGHIKLMNPQRSTVWY]")
+    non_canonical_aa = re.compile(r"[^ACDEFGHIKLMNPQRSTVWY]")
     bad_id_chars = re.compile(r"[^>a-zA-Z0-9_\s-]")
 
     for fasta_object in fasta_array:
@@ -184,14 +184,14 @@ def test_id_sequence(strict, fasta_array):
         fasta_object.sequence = fasta_object.sequence.upper()
 
         if strict:
-            if non_canonical_AA.search(fasta_object.sequence):
+            if non_canonical_aa.search(fasta_object.sequence):
                 raise Exception("Non canonical amino acids detected and strict mode activated")
-            elif bad_id_chars.search(fasta_object.ID):
+            elif bad_id_chars.search(fasta_object.id):
                 raise Exception("Bad characters in ID and strict mode activated")
             else:
                 validated_array.append(fasta_object)
         else:
-            if not non_canonical_AA.search(fasta_object.sequence):
+            if not non_canonical_aa.search(fasta_object.sequence):
                 validated_array.append(fasta_object)
 
     if len(validated_array) == 0:
@@ -210,14 +210,14 @@ def check_single(strict, fasta_array):
     return fasta_array
 
 
-def write_FASTA(inputfile, validated_array):
+def write_fasta(inputfile, validated_array):
     outputfile = get_outputfile(inputfile)
 
     index = 0
     with open(outputfile, "w") as output:
         for object in validated_array:
             index += 1
-            output.write(object.ID + "\n")
+            output.write(object.id + "\n")
             if index == len(validated_array):
                 output.write(object.sequence + "\n")
             else:
@@ -232,7 +232,7 @@ class ProcessFasta():
         self.strict = strict
 
         self.fasta_array = self.get_fasta()
-        self.validated_array = self.validate_FASTA()
+        self.validated_array = self.validate_fasta()
 
     def get_fasta(self):
         try:
@@ -244,7 +244,7 @@ class ProcessFasta():
             raise (ValueError)
         return fasta_array
 
-    def validate_FASTA(self):
+    def validate_fasta(self):
         try:
             object_array = convert_to_obj_array(self.fasta_array)
             validated_array = test_id_sequence(self.strict, object_array)
@@ -254,8 +254,8 @@ class ProcessFasta():
             raise (ValueError)
         return validated_array
 
-    def write_FASTA(self):
+    def write_fasta(self):
         try:
-            write_FASTA(self.inputfile, self.validated_array)
+            write_fasta(self.inputfile, self.validated_array)
         except:
             raise (ValueError)

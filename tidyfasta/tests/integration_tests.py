@@ -1,10 +1,12 @@
 import unittest
 import filecmp
+import os
 
 from tidyfasta.common.process import *
 
 def get_test_dir():
-    return os.path.dirname(os.path.realpath(__file__))
+    dir = os.path.dirname(os.path.realpath(__file__))
+    return dir
 
 class IntegrationTests(unittest.TestCase):
 
@@ -14,7 +16,7 @@ class IntegrationTests(unittest.TestCase):
         output_file = get_outputfile(input_file)
 
         new = ProcessFasta(input_file, False, False)
-        new.write_FASTA()
+        new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_broken_lines.txt"
         os.rename(output_file, renamed_file)
@@ -32,7 +34,7 @@ class IntegrationTests(unittest.TestCase):
         output_file = get_outputfile(input_file)
 
         new = ProcessFasta(input_file, False, False)
-        new.write_FASTA()
+        new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_broken_lines_multiple.txt"
         os.rename(output_file, renamed_file)
@@ -50,7 +52,7 @@ class IntegrationTests(unittest.TestCase):
         output_file = get_outputfile(input_file)
 
         new = ProcessFasta(input_file, True, False)
-        new.write_FASTA()
+        new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_broken_lines_multiple.txt"
         os.rename(output_file, renamed_file)
@@ -68,7 +70,7 @@ class IntegrationTests(unittest.TestCase):
         output_file = get_outputfile(input_file)
 
         new = ProcessFasta(input_file, True, False)
-        new.write_FASTA()
+        new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_excess_whitespace_end.txt"
         os.rename(output_file, renamed_file)
@@ -86,7 +88,7 @@ class IntegrationTests(unittest.TestCase):
         output_file = get_outputfile(input_file)
 
         new = ProcessFasta(input_file, False, False)
-        new.write_FASTA()
+        new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_excess_whitespace_mid.txt"
         os.rename(output_file, renamed_file)
@@ -103,7 +105,7 @@ class IntegrationTests(unittest.TestCase):
         input_file = get_test_dir() + "/inputs/test_missing_name.txt"
         output_file = get_outputfile(input_file)
         new = ProcessFasta(input_file, False, False)
-        new.write_FASTA()
+        new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_missing_name.txt"
         os.rename(output_file, renamed_file)
