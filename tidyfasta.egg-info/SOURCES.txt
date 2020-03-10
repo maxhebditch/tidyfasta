@@ -5,6 +5,7 @@ tidyfasta/__main__.py
 tidyfasta.egg-info/PKG-INFO
 tidyfasta.egg-info/SOURCES.txt
 tidyfasta.egg-info/dependency_links.txt
+tidyfasta.egg-info/entry_points.txt
 tidyfasta.egg-info/top_level.txt
 tidyfasta/common/__init__.py
 tidyfasta/common/process.py

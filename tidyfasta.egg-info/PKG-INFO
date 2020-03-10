@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: tidyfasta
-Version: 1.0.0
+Version: 1.0.2
 Summary: Sanitise protein FASTA files / data
 Home-page: https://github.com/maxhebditch/tidyfasta
 Author: Max Hebditch
@@ -22,15 +22,34 @@ Description: # tidyfasta
         | Lowercase AA                | Converts to uppercase AA                |
         | Excessive Whitespace        | Removes excessive whitespace            | 
         
-        ## Usage
-        
-            tidyfasta.py --input file.FASTA
-            tidyfasta.py --input file.FASTA --single
-            tidyfasta.py --input file.FASTA --single --strict
         
         ## Output
         
         1. Tidied version of original file
+        
+        ## Usage
+        
+        #### Script
+        
+            from tidyfasta.common.process import ProcessFasta
+            
+            input_file = "sample.txt"
+            
+            np = ProcessFasta(input_file, True, False)
+            
+            fasta_array = np.get_fasta()
+            print(fasta_array)
+            
+            for i in np.validated_array:
+                print(i.id+"\n")
+                print(i.sequence+"\n")
+            
+            np.write_fasta()
+        
+        
+        
+        
+        
         
 Platform: UNKNOWN
 Description-Content-Type: text/markdown

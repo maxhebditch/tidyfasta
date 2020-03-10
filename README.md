@@ -1,6 +1,8 @@
 # tidyfasta
 
- A python program to tidy and sanitise FASTA sequence files
+ A python program to tidy and sanitise FASTA sequence files.
+ 
+ It can be imported as a package or used directly from the command line.
 
 ## Problems and fixes
 
@@ -14,12 +16,28 @@
 | Lowercase AA                | Converts to uppercase AA                |
 | Excessive Whitespace        | Removes excessive whitespace            | 
 
+
 ## Usage
 
-    tidyfasta.py --input file.FASTA
-    tidyfasta.py --input file.FASTA --single
-    tidyfasta.py --input file.FASTA --single --strict
+#### Command line interface
 
-## Output
+    $ tidyfasta --input file.txt
+    
+    $ tidyfasta --input file.txt --strict --single
 
-1. Tidied version of original file
+#### Script
+
+    from tidyfasta.common.process import ProcessFasta
+    
+    input_file = "sample.txt"
+    
+    np = ProcessFasta(input_file, strict=True, single=False)
+    
+    fasta_array = np.get_fasta()
+    print(fasta_array)
+    
+    for i in np.validated_array:
+        print(i.id+"\n")
+        print(i.sequence+"\n")
+    
+    np.write_fasta()

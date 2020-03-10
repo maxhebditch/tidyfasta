@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 from .common.process import ProcessFasta
 
@@ -13,7 +14,13 @@ def main():
     single = args.single
     strict = args.strict
 
-    ProcessFasta(inputfile, single, strict)
+    if inputfile:
+        np = ProcessFasta(inputfile, single, strict)
+        np.write_fasta()
+    else:
+        print("No input file specified")
+        parser.print_help(sys.stderr)
+        sys.exit(0)
     
 if __name__ == "__main__":
     main()
