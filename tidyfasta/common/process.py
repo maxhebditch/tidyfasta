@@ -4,10 +4,11 @@ import os
 import time
 
 
-class fasta_sequence:
+class FastaSequence:
     def __init__(self, ID, sequence):
         self.ID = ID
         self.sequence = sequence
+
 
 def identify_line_type(item):
     item = item.strip()
@@ -18,22 +19,23 @@ def identify_line_type(item):
     elif re.match(r"[a-zA-Z0-9]", item):
         return "SEQUENCE"
 
+
 def get_outputfile(inputfile):
     split_path = os.path.split(inputfile)
 
     if not os.path.exists(split_path[0]):
         raise Exception("Output location: " + split_path[0] + " does not exist")
 
-    candidate_output_file = split_path[0]+"/tidied-"+split_path[1]
+    candidate_output_file = split_path[0] + "/tidied-" + split_path[1]
 
     if os.path.exists(candidate_output_file):
         unix_timestamp = int(time.time())
-        os.rename(candidate_output_file, split_path[0]+"/tidied-"+str(unix_timestamp)+"-"+split_path[1])
+        os.rename(candidate_output_file, split_path[0] + "/tidied-" + str(unix_timestamp) + "-" + split_path[1])
 
     return candidate_output_file
 
-def read_fasta(inputfile) -> object:
 
+def read_fasta(inputfile) -> object:
     if not pathlib.Path(inputfile).exists():
         raise Exception("Path " + str(inputfile) + " doesn't exist")
 
@@ -50,7 +52,6 @@ def read_fasta(inputfile) -> object:
 
 
 def combine_split_sequences(fasta_array):
-
     def end_of_sequence(item):
         if identify_line_type(item) == "ID":
             return True
@@ -78,38 +79,31 @@ def combine_split_sequences(fasta_array):
 
     return combined_array
 
-def remove_excess_whitespace(fasta_array):
 
-    def is_sequence_or_id(item):
-        if identify_line_type(item) == "ID":
-            return True
-        elif identify_line_type(item) == "SEQUENCE":
-            return True
-        else:
-            return False
+def remove_whitespace(fasta_array):
 
     cleaned_array = []
     index = 0
 
     while index < len(fasta_array):
-        if is_sequence_or_id(fasta_array[index]):
-            cleaned_array.append(fasta_array[index].strip())
-            index += 1
-        else:
+        if identify_line_type(fasta_array[index]) == "WHITESPACE":
             index += 1
             for item in fasta_array[index:]:
-                if not is_sequence_or_id(item):
+                if identify_line_type(item) == "WHITESPACE":
                     index += 1
                 else:
                     break
+        else:
+            cleaned_array.append(fasta_array[index].strip())
+            index += 1
 
     if not cleaned_array:
         raise Exception("Cleaned array not generated")
 
     return cleaned_array
 
-def add_missing_names(fasta_array):
 
+def add_missing_names(fasta_array):
     named_array = []
     new_name_int = 0
     unknown_name = True
@@ -121,7 +115,7 @@ def add_missing_names(fasta_array):
             unknown_name = False
 
         elif re.match(r'^\s*$', item):
-            new_name = "> sequence"+str(new_name_int)
+            new_name = "> sequence" + str(new_name_int)
             new_name_int += 1
             unknown_name = False
             named_array.append(new_name)
@@ -143,8 +137,8 @@ def add_missing_names(fasta_array):
 
     return named_array
 
-def convert_to_obj_array(fasta_array):
 
+def convert_to_obj_array(fasta_array):
     def test_item_pair(fasta_array, index):
 
         if not fasta_array[index].startswith(">"):
@@ -162,12 +156,12 @@ def convert_to_obj_array(fasta_array):
 
     while index < len(fasta_array):
         if test_item_pair(fasta_array, index):
-            object_array.append(fasta_sequence(fasta_array[index], fasta_array[index + 1]))
+            object_array.append(FastaSequence(fasta_array[index], fasta_array[index + 1]))
             index += 2
         else:
             if identify_line_type(fasta_array[index]) != "ID":
                 raise Exception("Issue identifying ID")
-            elif identify_line_type(fasta_array[index+1]) != "SEQUENCE":
+            elif identify_line_type(fasta_array[index + 1]) != "SEQUENCE":
                 raise Exception("ID without sequence")
             else:
                 raise Exception("Object array failed")
@@ -177,10 +171,8 @@ def convert_to_obj_array(fasta_array):
 
     return object_array
 
-def test_ID_sequence(single, strict, fasta_array):
 
-    if not fasta_array:
-        raise Exception("Input array empty")
+def test_id_sequence(single, strict, fasta_array):
 
     if single and strict and len(fasta_array) > 1:
         raise Exception("More than 1 sequence present and single mode activated")
@@ -211,19 +203,19 @@ def test_ID_sequence(single, strict, fasta_array):
 
     return validated_array
 
-def write_FASTA(inputfile, validated_array):
 
+def write_FASTA(inputfile, validated_array):
     outputfile = get_outputfile(inputfile)
 
     index = 0
     with open(outputfile, "w") as output:
         for object in validated_array:
             index += 1
-            output.write(object.ID+"\n")
+            output.write(object.ID + "\n")
             if index == len(validated_array):
-                output.write(object.sequence+"\n")
+                output.write(object.sequence + "\n")
             else:
-                output.write(object.sequence+"\n\n")
+                output.write(object.sequence + "\n\n")
 
 
 class ProcessFasta():
@@ -240,22 +232,22 @@ class ProcessFasta():
         try:
             fasta_array = read_fasta(self.inputfile)
             fasta_array = combine_split_sequences(fasta_array)
-            fasta_array = remove_excess_whitespace(fasta_array)
+            fasta_array = remove_whitespace(fasta_array)
             fasta_array = add_missing_names(fasta_array)
         except:
-            raise(ValueError)
+            raise (ValueError)
         return fasta_array
 
     def validate_FASTA(self):
         try:
             object_array = convert_to_obj_array(self.fasta_array)
-            validated_array = test_ID_sequence(self.single, self.strict, object_array)
+            validated_array = test_id_sequence(self.single, self.strict, object_array)
         except:
-            raise(ValueError)
+            raise (ValueError)
         return validated_array
 
     def write_FASTA(self):
         try:
             write_FASTA(self.inputfile, self.validated_array)
         except:
-            raise(ValueError)
+            raise (ValueError)

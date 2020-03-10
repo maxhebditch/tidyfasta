@@ -27,7 +27,7 @@ class UnitTests(unittest.TestCase):
     def test_func_read_fasta_excess_whitespace_multi(self):
 
         input_array = read_fasta(get_test_dir()+"/inputs/test_excess_whitespace_multi.txt")
-        test_array = remove_excess_whitespace(input_array)
+        test_array = remove_whitespace(input_array)
 
         ref_array = ["> alirocumab1", "MVKVYAPASSANMSVGFDVLGAA",
                     "> alirocumab2", "MVKVYAPASSANMSVGFDVLGAA",
@@ -41,7 +41,7 @@ class UnitTests(unittest.TestCase):
                      "   > alirocumab2", "   MVKVYAPASSANMSVGFDVLGAA",
                      "> alirocumab3   ", "MVKVYAPASSANMSVGFDVLGAA", "", " ", " "]
 
-        test_array = remove_excess_whitespace(input_array)
+        test_array = remove_whitespace(input_array)
 
         ref_array = ["> alirocumab1", "MVKVYAPASSANMSVGFDVLGAA",
                      "> alirocumab2", "MVKVYAPASSANMSVGFDVLGAA",
@@ -51,7 +51,7 @@ class UnitTests(unittest.TestCase):
 
     def test_func_remove_excess_whitespace_empty_input(self):
 
-        with self.assertRaisesRegex(Exception, "Cleaned array not generated") : remove_excess_whitespace([])
+        with self.assertRaisesRegex(Exception, "Cleaned array not generated") : remove_whitespace([])
 
     def test_func_combine_split_sequences(self):
 
@@ -101,8 +101,8 @@ class UnitTests(unittest.TestCase):
 
         test_array = convert_to_obj_array(input_array)
 
-        obj0 = Fasta_sequence("> alirocumab", "MVKVYAPASSANMSVGFDVL")
-        obj1 = Fasta_sequence("> sequence1", "GGGGGGGG")
+        obj0 = FastaSequence("> alirocumab", "MVKVYAPASSANMSVGFDVL")
+        obj1 = FastaSequence("> sequence1", "GGGGGGGG")
 
         self.assertEqual(test_array[0].ID, obj0.ID)
         self.assertEqual(test_array[1].ID, obj1.ID)
@@ -124,16 +124,16 @@ class UnitTests(unittest.TestCase):
 
     def test_func_validate_input_no_bools(self):
 
-        with self.assertRaisesRegex(TypeError, "missing 2 required positional") : test_ID_sequence([])
+        with self.assertRaisesRegex(TypeError, "missing 2 required positional") : test_id_sequence([])
 
     def test_func_validate_input(self):
 
-        with self.assertRaisesRegex(Exception, "Input array empty") : test_ID_sequence(False, True, [])
+        with self.assertRaisesRegex(Exception, "No valid AA in input") : test_id_sequence(False, True, [])
 
     def test_func_validate_id_sequence_upper(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "aaaaaaaaaaaaaaaaaaa"])
-        valid_array = test_ID_sequence(False, False, test_array)
+        valid_array = test_id_sequence(False, False, test_array)
 
         self.assertEqual("> alirocumab", valid_array[0].ID)
         self.assertEqual("AAAAAAAAAAAAAAAAAAA", valid_array[0].sequence)
@@ -141,28 +141,28 @@ class UnitTests(unittest.TestCase):
     def test_func_validate_id_sequence_bad_ID(self):
 
         test_array = convert_to_obj_array(["> alir<cumab", "AAAAAAKKKKK"])
-        with self.assertRaisesRegex(Exception, "Bad characters in ID") : test_ID_sequence(False, True, test_array)
+        with self.assertRaisesRegex(Exception, "Bad characters in ID") : test_id_sequence(False, True, test_array)
 
     def test_func_validate_id_sequence_bad_AA(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAXXXKKKKKK"])
-        with self.assertRaisesRegex(Exception, "Non canonical amino acids") : test_ID_sequence(False, True, test_array)
+        with self.assertRaisesRegex(Exception, "Non canonical amino acids") : test_id_sequence(False, True, test_array)
 
     def test_func_validate_id_sequence_bad_AA_numbers(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "aaaaaa1KKKKK"])
-        with self.assertRaisesRegex(Exception, "Non canonical amino acids") : test_ID_sequence(False, True, test_array)
+        with self.assertRaisesRegex(Exception, "Non canonical amino acids") : test_id_sequence(False, True, test_array)
 
     def test_func_validate_id_sequence_bad_AA_space(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAA KKKKK"])
-        with self.assertRaisesRegex(Exception, "Non canonical amino acids") : test_ID_sequence(False, True, test_array)
+        with self.assertRaisesRegex(Exception, "Non canonical amino acids") : test_id_sequence(False, True, test_array)
 
     def test_func_validate_id_sequence_bad_AA_numbers_nonstrict(self):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAK1KKKK",
                                            "> secondone", "TTTTTTTT"])
-        valid_array = test_ID_sequence(False, False, test_array)
+        valid_array = test_id_sequence(False, False, test_array)
 
         self.assertEqual(len(valid_array), 1)
 
@@ -171,7 +171,7 @@ class UnitTests(unittest.TestCase):
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAKKKKK",
                                            "> secondone", "TTTTTTTT"])
         with self.assertRaisesRegex(Exception, "More than 1 sequence present") \
-                : test_ID_sequence(True, True, test_array)
+                : test_id_sequence(True, True, test_array)
 
     def test_func_write_FASTA(self):
 
