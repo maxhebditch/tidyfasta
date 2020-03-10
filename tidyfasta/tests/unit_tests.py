@@ -94,7 +94,6 @@ class UnitTests(unittest.TestCase):
 
         self.assertEqual(ref_array, test_array)
 
-
     def test_convert_to_object_array(self):
 
         input_array = ["> alirocumab", "MVKVYAPASSANMSVGFDVL",
@@ -102,8 +101,8 @@ class UnitTests(unittest.TestCase):
 
         test_array = convert_to_obj_array(input_array)
 
-        obj0 = fasta_sequence("> alirocumab", "MVKVYAPASSANMSVGFDVL")
-        obj1 = fasta_sequence("> sequence1", "GGGGGGGG")
+        obj0 = Fasta_sequence("> alirocumab", "MVKVYAPASSANMSVGFDVL")
+        obj1 = Fasta_sequence("> sequence1", "GGGGGGGG")
 
         self.assertEqual(test_array[0].ID, obj0.ID)
         self.assertEqual(test_array[1].ID, obj1.ID)
@@ -182,26 +181,27 @@ class UnitTests(unittest.TestCase):
 
         output_file = get_test_dir() + "/outputs/tidied-test-write.txt"
 
-        assert(os.path.exists(output_file))
-
-        os.remove(output_file)
+        try:
+            self.assertEqual(1, os.path.exists(output_file))
+        finally:
+            os.remove(output_file)
 
     def test_class_method_ProcessFASTA_get_fasta_gold_standard(self):
 
-        test_ProcessFasta = ProcessFasta(get_test_dir() + "/inputs/test_gold_standard.txt", False, False)
+        test_processfasta = ProcessFasta(get_test_dir() + "/inputs/test_gold_standard.txt", False, False)
 
-        valid_array = test_ProcessFasta.get_fasta()
-        valid_array = test_ProcessFasta.validate_FASTA()
+        test_processfasta.get_fasta()
+        valid_array = test_processfasta.validate_FASTA()
 
         self.assertEqual("> alirocumab", valid_array[0].ID)
         self.assertEqual("MVKVYAPASSANMSVGFDVLGAAVTPVDGALLGDVVTVEAAETF", valid_array[0].sequence)
 
     def test_class_method_ProcessFASTA_get_fasta_excess_whitespace_multi(self):
 
-        test_ProcessFasta = ProcessFasta(get_test_dir() + "/inputs/test_excess_whitespace_multi.txt", False, False)
+        test_processfasta = ProcessFasta(get_test_dir() + "/inputs/test_excess_whitespace_multi.txt", False, False)
 
-        valid_array = test_ProcessFasta.get_fasta()
-        valid_array = test_ProcessFasta.validate_FASTA()
+        test_processfasta.get_fasta()
+        valid_array = test_processfasta.validate_FASTA()
 
         self.assertEqual("> alirocumab1", valid_array[0].ID)
         self.assertEqual("MVKVYAPASSANMSVGFDVLGAA", valid_array[0].sequence)
