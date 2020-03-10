@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: tidyfasta
-Version: 1.0.2
+Version: 1.0.3
 Summary: Sanitise protein FASTA files / data
 Home-page: https://github.com/maxhebditch/tidyfasta
 Author: Max Hebditch
