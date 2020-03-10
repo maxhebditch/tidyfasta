@@ -235,27 +235,18 @@ class ProcessFasta():
         self.validated_array = self.validate_fasta()
 
     def get_fasta(self):
-        try:
-            fasta_array = read_fasta(self.inputfile)
-            fasta_array = combine_split_sequences(fasta_array)
-            fasta_array = remove_whitespace(fasta_array)
-            fasta_array = add_missing_names(fasta_array)
-        except:
-            raise (ValueError)
+        fasta_array = read_fasta(self.inputfile)
+        fasta_array = combine_split_sequences(fasta_array)
+        fasta_array = remove_whitespace(fasta_array)
+        fasta_array = add_missing_names(fasta_array)
         return fasta_array
 
     def validate_fasta(self):
-        try:
-            object_array = convert_to_obj_array(self.fasta_array)
-            validated_array = test_id_sequence(self.strict, object_array)
-            if self.single:
-                validated_array = check_single(self.strict, object_array)
-        except:
-            raise (ValueError)
+        object_array = convert_to_obj_array(self.fasta_array)
+        validated_array = test_id_sequence(self.strict, object_array)
+        if self.single:
+            validated_array = check_single(self.strict, object_array)
         return validated_array
 
     def write_fasta(self):
-        try:
-            write_fasta(self.inputfile, self.validated_array)
-        except:
-            raise (ValueError)
+        write_fasta(self.inputfile, self.validated_array)
