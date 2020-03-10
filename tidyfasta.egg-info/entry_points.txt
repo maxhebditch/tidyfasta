@@ -1,0 +1,3 @@
+[console_scripts]
+tidyfasta = tidyfasta.__main__:main
+
