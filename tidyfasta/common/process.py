@@ -21,7 +21,7 @@ def identify_line_type(item):
 
 
 def get_outputfile(inputfile):
-    split_path = os.path.split(inputfile)
+    split_path = os.path.split(os.path.abspath(inputfile))
 
     if not os.path.exists(split_path[0]):
         raise Exception("Output location: " + split_path[0] + " does not exist")

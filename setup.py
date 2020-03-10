@@ -9,7 +9,7 @@ print(README)
 
 setup(
     name='tidyfasta',
-    version='1.0.0',
+    version='1.0.1',
     packages=['tidyfasta', 'tidyfasta.common'],
     url='https://github.com/maxhebditch/tidyfasta',
     license='MIT',
