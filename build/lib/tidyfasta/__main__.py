@@ -2,8 +2,7 @@ import argparse
 
 from .common.process import ProcessFasta
 
-if __name__ == "__main__":
-
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", type=str, help="Input file name")
     parser.add_argument("--single", action="store_true", help="Ensure only single sequence")
@@ -15,3 +14,6 @@ if __name__ == "__main__":
     strict = args.strict
 
     ProcessFasta(inputfile, single, strict)
+    
+if __name__ == "__main__":
+    main()
