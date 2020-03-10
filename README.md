@@ -1,23 +1,25 @@
-# Tidy fasta sequences
+# tidyfasta
 
-Simple code that takes a messy FASTA file and tidies up
+ A python program to tidy and sanitise FASTA sequence files
 
 ## Problems and fixes
 
-| Problem                | Fix                                     |
-|------------------------|-----------------------------------------|
-| Sequence without ID    | ID name added                           |
-| Multiline sequence     | One line per sequence                   |
-| Non canonical AA       | Script raises exception and alert user  |
-| ID without sequence    | Script raises exception and alerts user |
-| Lowercase AA           | Converts to uppercase AA                |
-| Whitespace             | Removes excessive whitespace            | 
+| Problem                     | Fix                                     |
+|-----------------------------|-----------------------------------------|
+| Sequence without ID         | ID name added                           |
+| ID without sequence         | Exception raised                        |
+| Multiline sequence          | One line per sequence                   |
+| Non canonical AA            | Exception raise                         |
+| Dangerous characters in ID  | Exception raise                         |
+| Lowercase AA                | Converts to uppercase AA                |
+| Excessive Whitespace        | Removes excessive whitespace            | 
 
 ## Usage
 
-    tidy_fasta.py --input file.FASTA
+    tidyfasta.py --input file.FASTA
+    tidyfasta.py --input file.FASTA --single
+    tidyfasta.py --input file.FASTA --single --strict
 
 ## Output
 
-1. Original file
-2. Formatted file (old file renamed)
+1. Tidied version of original file
