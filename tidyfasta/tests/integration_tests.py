@@ -55,7 +55,7 @@ class IntegrationTests(unittest.TestCase):
         renamed_file = get_test_dir() + "/outputs/test_broken_lines_multiple.txt"
         os.rename(output_file, renamed_file)
 
-        standard_file = get_test_dir() + "/standards/test_broken_lines.txt"
+        standard_file = get_test_dir() + "/standards/test_broken_lines_multiple.txt"
 
         try:
             self.assertTrue(filecmp.cmp(renamed_file, standard_file, shallow=False))

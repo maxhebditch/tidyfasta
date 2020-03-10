@@ -172,10 +172,7 @@ def convert_to_obj_array(fasta_array):
     return object_array
 
 
-def test_id_sequence(single, strict, fasta_array):
-
-    if single and strict and len(fasta_array) > 1:
-        raise Exception("More than 1 sequence present and single mode activated")
+def test_id_sequence(strict, fasta_array):
 
     validated_array = []
 
@@ -189,8 +186,10 @@ def test_id_sequence(single, strict, fasta_array):
         if strict:
             if non_canonical_AA.search(fasta_object.sequence):
                 raise Exception("Non canonical amino acids detected and strict mode activated")
-            if bad_id_chars.search(fasta_object.ID):
+            elif bad_id_chars.search(fasta_object.ID):
                 raise Exception("Bad characters in ID and strict mode activated")
+            else:
+                validated_array.append(fasta_object)
         else:
             if not non_canonical_AA.search(fasta_object.sequence):
                 validated_array.append(fasta_object)
@@ -198,10 +197,17 @@ def test_id_sequence(single, strict, fasta_array):
     if len(validated_array) == 0:
         raise Exception("No valid AA in input")
 
-    if single and len(validated_array) > 1:
-        validated_array = [validated_array[0]]
-
     return validated_array
+
+def check_single(strict, fasta_array):
+
+    if strict and len(fasta_array) > 1:
+        raise Exception("More than 1 sequence present and single mode activated")
+
+    if strict and len(fasta_array) > 1:
+        fasta_array = [fasta_array[0]]
+
+    return fasta_array
 
 
 def write_FASTA(inputfile, validated_array):
@@ -241,7 +247,9 @@ class ProcessFasta():
     def validate_FASTA(self):
         try:
             object_array = convert_to_obj_array(self.fasta_array)
-            validated_array = test_id_sequence(self.single, self.strict, object_array)
+            validated_array = test_id_sequence(self.strict, object_array)
+            if self.single:
+                validated_array = check_single(self.strict, object_array)
         except:
             raise (ValueError)
         return validated_array
