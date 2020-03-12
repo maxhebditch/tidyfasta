@@ -1,6 +1,6 @@
+import os
 import pathlib
 import re
-import os
 import time
 
 
@@ -224,9 +224,9 @@ def write_fasta(inputfile, validated_array):
                 output.write(object.sequence + "\n\n")
 
 
-class ProcessFasta():
+class ProcessFasta:
 
-    def __init__(self, inputfile, single, strict):
+    def __init__(self, inputfile, single=False, strict=False):
         self.inputfile = inputfile
         self.single = single
         self.strict = strict
