@@ -179,8 +179,11 @@ class UnitTests(unittest.TestCase):
 
         test_array = convert_to_obj_array(["> alirocumab", "AAAAAAKKKKK",
                                            "> secondone", "TTTTTTTT"])
-        write_fasta(get_test_dir() + "/outputs/test-write.txt", test_array)
 
+        if not os.path.exists((get_test_dir()+"/outputs")):
+            os.mkdir(get_test_dir()+"/outputs")
+
+        write_fasta(get_test_dir() + "/outputs/test-write.txt", test_array)
         output_file = get_test_dir() + "/outputs/tidied-test-write.txt"
 
         try:
