@@ -8,6 +8,13 @@ def get_test_dir():
     dir = os.path.dirname(os.path.realpath(__file__))
     return dir
 
+def handle_output(output_file, renamed_file):
+    try:
+        os.rename(output_file, renamed_file)
+    except:
+        os.remove(output_file)
+
+
 class IntegrationTests(unittest.TestCase):
 
     def test_ProcessFASTA_broken_lines(self):
@@ -19,7 +26,7 @@ class IntegrationTests(unittest.TestCase):
         new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_broken_lines.txt"
-        os.rename(output_file, renamed_file)
+        handle_output(output_file, renamed_file)
 
         standard_file = get_test_dir() + "/standards/test_broken_lines.txt"
 
@@ -37,7 +44,7 @@ class IntegrationTests(unittest.TestCase):
         new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_broken_lines_multiple.txt"
-        os.rename(output_file, renamed_file)
+        handle_output(output_file, renamed_file)
 
         standard_file = get_test_dir() + "/standards/test_broken_lines_multiple.txt"
 
@@ -55,7 +62,7 @@ class IntegrationTests(unittest.TestCase):
         new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_broken_lines_multiple.txt"
-        os.rename(output_file, renamed_file)
+        handle_output(output_file, renamed_file)
 
         standard_file = get_test_dir() + "/standards/test_broken_lines_multiple.txt"
 
@@ -73,6 +80,8 @@ class IntegrationTests(unittest.TestCase):
         new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_excess_whitespace_end.txt"
+        handle_output(output_file, renamed_file)
+
         os.rename(output_file, renamed_file)
 
         standard_file = get_test_dir() + "/standards/test_excess_whitespace_end.txt"
@@ -91,7 +100,7 @@ class IntegrationTests(unittest.TestCase):
         new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_excess_whitespace_mid.txt"
-        os.rename(output_file, renamed_file)
+        handle_output(output_file, renamed_file)
 
         standard_file = get_test_dir() + "/standards/test_excess_whitespace_mid.txt"
 
@@ -108,7 +117,7 @@ class IntegrationTests(unittest.TestCase):
         new.write_fasta()
 
         renamed_file = get_test_dir() + "/outputs/test_missing_name.txt"
-        os.rename(output_file, renamed_file)
+        handle_output(output_file, renamed_file)
 
         standard_file = get_test_dir() + "/standards/test_missing_name.txt"
 
@@ -118,4 +127,9 @@ class IntegrationTests(unittest.TestCase):
             os.remove(renamed_file)
 
 if __name__ == '__main__':
+
+    if not os.path.exists(get_test_dir() + "/outputs/"):
+        print("Making test dir")
+        os.mkdir(get_test_dir() + "/outputs")
+
     unittest.main()
