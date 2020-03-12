@@ -9,6 +9,11 @@ def get_test_dir():
     return dir
 
 def handle_output(output_file, renamed_file):
+
+    if not os.path.exists(get_test_dir()+"/outputs"):
+        print("Making output dir")
+        os.mkdir(get_test_dir()+"/outputs")
+
     try:
         os.rename(output_file, renamed_file)
     except:
@@ -82,8 +87,6 @@ class IntegrationTests(unittest.TestCase):
         renamed_file = get_test_dir() + "/outputs/test_excess_whitespace_end.txt"
         handle_output(output_file, renamed_file)
 
-        os.rename(output_file, renamed_file)
-
         standard_file = get_test_dir() + "/standards/test_excess_whitespace_end.txt"
 
         try:
@@ -127,9 +130,5 @@ class IntegrationTests(unittest.TestCase):
             os.remove(renamed_file)
 
 if __name__ == '__main__':
-
-    if not os.path.exists(get_test_dir() + "/outputs/"):
-        print("Making test dir")
-        os.mkdir(get_test_dir() + "/outputs")
 
     unittest.main()
