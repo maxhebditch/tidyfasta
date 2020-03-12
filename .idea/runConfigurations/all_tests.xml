@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="all_tests" type="CompoundRunConfigurationType">
+    <toRun name="Unittests in integration_tests.py" type="tests" />
+    <toRun name="Unittests in unit_tests.py" type="tests" />
+    <method v="2" />
+  </configuration>
+</component>
