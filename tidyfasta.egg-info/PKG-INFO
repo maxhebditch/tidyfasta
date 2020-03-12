@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: tidyfasta
-Version: 1.0.4
+Version: 1.0.5
 Summary: Sanitise protein FASTA files / data
 Home-page: https://github.com/maxhebditch/tidyfasta
 Author: Max Hebditch
@@ -8,19 +8,31 @@ Author-email: max@maxhebditch.co.uk
 License: MIT
 Description: # tidyfasta
         
-         A python program to tidy and sanitise FASTA sequence files.
+        A python program to tidy and sanitise FASTA sequence files.
          
-         It can be imported as a package or used directly from the command line.
+        It can be imported as a package or used directly from the command line.
+        
+        If run in non-strict mode (default), any sequence that a breaking issue, such as a non-canonical AA, dangerous characters (any non-alphanumeric character with the exception of `_ -`), or is just an ID without a sequence, will be ignored. 
+        If run in strict mode then an exception is raised.
+        
+        When run from the command line interface the script will write a file to the same directory as the input file with the prefix `tidied-` followed by the input file name. 
+        If there is already an output file, then the prefix will be `tidied-UNIXTIME-` where UNIXTIME is the time at which the script was called.
+        
+        If imported, after calling the class `ProcessFasta`, two member variables are available. 
+        `ProcessFasta.fasta_array` returns a minimally validated array of strings, where split lines are combined, excess whitespace is removed, and missing names are added.
+        `ProcessFasta.validated_array` returns a validated_array of objects, where each object has two variables `id` and `sequence`.
+        The validated array is checked for non-canonical AA in the sequence and banned characters from the ID. 
+        
         
         ## Problems and fixes
         
-        | Problem                     | Fix                                     |
+        | Problem                     | Fix (Strict mode)                       |
         |-----------------------------|-----------------------------------------|
         | Sequence without ID         | ID name added                           |
-        | ID without sequence         | Exception raised                        |
         | Multiline sequence          | One line per sequence                   |
-        | Non canonical AA            | Exception raise                         |
-        | Dangerous characters in ID  | Exception raise                         |
+        | ID without sequence         | Sequence ignored (Exception raised)     |
+        | Non canonical AA            | Sequence ignored (Exception raised)     |
+        | Dangerous characters in ID  | Sequence ignored (Exception raised)     |
         | Lowercase AA                | Converts to uppercase AA                |
         | Excessive Whitespace        | Removes excessive whitespace            | 
         
@@ -33,8 +45,13 @@ Description: # tidyfasta
         #### Command line interface
         
             $ tidyfasta --input file.txt
-            
+        
             $ tidyfasta --input file.txt --strict --single
+        
+            $ tidyfasta --input file.txt --version
+        
+            $ tidyfasta --input file.txt --help
+            
         
         #### Script
         
@@ -44,7 +61,7 @@ Description: # tidyfasta
             
             np = ProcessFasta(input_file, strict=True, single=False)
             
-            fasta_array = np.get_fasta()
+            fasta_array = np.fasta_array
             print(fasta_array)
             
             for i in np.validated_array:
