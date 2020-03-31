@@ -1,5 +1,7 @@
 # tidyfasta
 
+[![Downloads](https://pepy.tech/badge/tidyfasta)](https://pepy.tech/project/tidyfasta)
+
 A python program to tidy and sanitise FASTA sequence files.
  
 It can be imported as a package or used directly from the command line.
