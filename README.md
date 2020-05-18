@@ -1,7 +1,7 @@
 # tidyfasta
 
 [![Downloads](https://pepy.tech/badge/tidyfasta)](https://pepy.tech/project/tidyfasta)
-![Build](https://github.com/maxhebditch/tidyfasta/workflows/Python%20application/badge.svg)
+![Build](https://github.com/maxhebditch/tidyfasta/workflows/Build/badge.svg)
 
 A python program to tidy and sanitise FASTA sequence files.
  
