@@ -6,6 +6,11 @@ A python program to tidy and sanitise FASTA sequence files.
  
 It can be imported as a package or used directly from the command line.
 
+## GUI
+A java based GUI called [tidyfasta-gui](https://github.com/maxhebditch/tidyfasta-gui) is also available.
+
+## Features
+
 If run in non-strict mode (default), any sequence that a breaking issue, such as a non-canonical AA, dangerous characters (any non-alphanumeric character with the exception of `_ -`), or is just an ID without a sequence, will be ignored. 
 If run in strict mode then an exception is raised.
 
