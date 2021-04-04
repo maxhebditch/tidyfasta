@@ -2,7 +2,6 @@
 
 [![Downloads](https://pepy.tech/badge/tidyfasta)](https://pepy.tech/project/tidyfasta)
 ![Build](https://github.com/maxhebditch/tidyfasta/workflows/Build/badge.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=maxhebditch_tidyfasta&metric=alert_status)](https://sonarcloud.io/dashboard?id=maxhebditch_tidyfasta)
 
 A python program to tidy and sanitise FASTA sequence files.
  
